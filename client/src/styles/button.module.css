@@ -1,0 +1,37 @@
+.formBtn {
+    background: var(--primary);
+    padding: 0.7em;
+    outline: none;
+    border: none;
+    font-family: var(--font-poppins);
+    border-radius: var(--radius-small);
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+}
+
+.formBtn:disabled {
+    background: var(--gray-bg);
+    color: var(--gray-4);
+}
+
+.authOption {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: none;
+    padding: 0.7em;
+    border-radius: var(--radius-small);
+    background: #fff;
+    box-shadow: var(--shadow-subtle);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.authOption:disabled {
+    background: var(--gray-bg);
+    color: var(--gray-4);
+    box-shadow: none;
+}

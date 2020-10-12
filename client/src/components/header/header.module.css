@@ -1,0 +1,144 @@
+.header {
+    background: #fff;
+    padding: 0.4em 1.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+}
+
+.form {
+    font-family: var(--font-poppins);
+    width: 20em;
+    margin-right: 2.75em;
+}
+.headerLeft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 30em;
+}
+
+.headerLeftInner {
+    display: flex;
+    align-items: center;
+}
+
+.headerRight {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.input {
+    outline: none;
+    border: none;
+    box-shadow: var(--shadow-subtle);
+    padding: 0.9em 6.9em 0.9em 0.9em;
+    border-radius: var(--radius);
+    font-size: 13px;
+    width: 100%;
+
+}
+.input::placeholder {
+    color: var(--gray-3);
+}
+.formBtn {
+    outline: none;
+    border: none;
+    background: var(--primary);
+    color: #fff;
+    padding: 0.8em 1.4em;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 13px;
+    margin-left: -6.1em;
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+}
+.profilePic {
+    width: 36px;
+    height: 36px;
+    background: var(--gray-3);
+    border-radius: var(--radius);
+}
+
+.details {
+    position: relative;
+}
+.summary {
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    list-style-type: none;
+    color: var(--heading-text);
+    display: flex;
+    align-items: center;
+}
+.summaryText {
+    margin: 0 0.6em;
+}
+
+.summary::-webkit-details-marker, .summary::marker {
+    display: none;
+}
+
+.links {
+    position: absolute;
+    background: #fff;
+    box-shadow: var(--shadow-subtle);
+    list-style-type: none;
+    max-width: 100%;
+    top: 3.8em;
+    right: 1.5em;
+    border-radius: var(--radius-small);
+    width: 7.5em;
+    padding: 0.2em 0;
+}
+
+.link {
+    display: block;
+    text-decoration: none;
+    padding: 0.4em 1.5em;
+    color: var(--gray-3);
+    font-size: 14px;
+}
+.link:hover {
+    background: var(--primary);
+    color: #fff;
+}
+
+.boards {
+    background: var(--gray-bg);
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    padding: 0.6em 1em;
+    color: var(--gray-3);
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.boardsText {
+    margin-left: 0.4em;
+    font-family: var(--font-poppins);
+}
+.boardNameText {
+    color: var(--heading-text);
+    font-family: var(--font-poppins);
+}
+.boardName {
+    position: relative;
+}
+
+.seperator {
+    width: 1px;
+    height: 2em;
+    background: var(--gray-4);
+    display: block;
+    margin: 0 1.2em;
+}

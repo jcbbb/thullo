@@ -1,0 +1,14 @@
+.formInput {
+    border: none;
+    outline: none;
+    background: var(--bg);
+    width: 100%;
+    padding: 0.7em;
+    border: 1px solid transparent;
+    font-size: 15px;
+}
+
+.formInput:focus {
+    background: transparent;
+    border: 1px solid var(--bg);
+}
