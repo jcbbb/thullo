@@ -1,14 +1,31 @@
-import React from "react";
-import Spacer from "../spacer";
-import Google from "../icons/google";
-import Github from "../icons/github";
-import styles from "./login.module.scss";
-import inputStyles from "../../styles/input.module.scss";
-import buttonStyles from "../../styles/button.module.scss";
-import linkStyles from "../../styles/link.module.scss";
-import { Link } from "react-router-dom";
+import React, { useState, ChangeEvent } from 'react';
+import Spacer from '../spacer';
+import Google from '../icons/google';
+import Github from '../icons/github';
+import styles from './login.module.scss';
+import inputStyles from '../../styles/input.module.scss';
+import buttonStyles from '../../styles/button.module.scss';
+import linkStyles from '../../styles/link.module.scss';
+import { isEmail, isMinNumber } from '../../utils';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
+  interface IForm {
+    email?: string;
+    password?: string;
+  }
+  const [isValidEmail, setIsValidEmail] = useState(false);
+  const [isValidPassword, setIsValidPassword] = useState(false);
+  const [values, setValues] = useState<IForm>({});
+
+  const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = ev.target;
+    setValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   return (
     <form className={styles.form}>
       <div className={styles.formContainer}>
@@ -19,6 +36,11 @@ const Login = () => {
             name="email"
             type="email"
             placeholder="Email"
+            value={values.email || ''}
+            onChange={(ev) => {
+              handleChange(ev);
+              setIsValidEmail(isEmail(ev.target.value));
+            }}
           />
         </Spacer>
         <Spacer left="0" right="0" top="0" bottom="1.8em">
@@ -27,9 +49,16 @@ const Login = () => {
             name="password"
             type="password"
             placeholder="Password"
+            value={values.password || ''}
+            onChange={(ev) => {
+              handleChange(ev);
+              setIsValidPassword(isMinNumber(ev.target.value, 6));
+            }}
           />
         </Spacer>
-        <button className={buttonStyles.formBtn}>Login</button>
+        <button className={buttonStyles.formBtn} disabled={!isValidEmail || !isValidPassword}>
+          Login
+        </button>
         <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
           <span className={styles.seperator}>or</span>
         </Spacer>

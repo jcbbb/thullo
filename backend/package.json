@@ -9,7 +9,7 @@
     "production-server": "cross-env NODE_ENV=production node build/index.js",
     "development-server": "cross-env NODE_ENV=development tsnd --respawn --transpile-only ./src/index.ts",
     "build": "tsc",
-    "client": "yarn --cwd client run start",
+    "client": "yarn --cwd ../client run start",
     "test": "cross-env NODE_ENV=test jest",
     "production-app": "cross-env NODE_ENV=production concurrently \"yarn client\" \"yarn production-server\"",
     "development-app": "cross-env NODE_ENV=development concurrently \"yarn client\" \"yarn development-server\""

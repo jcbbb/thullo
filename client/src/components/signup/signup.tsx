@@ -1,14 +1,17 @@
-import React from "react";
-import Spacer from "../spacer";
-import Google from "../icons/google";
-import Github from "../icons/github";
-import styles from "./signup.module.scss";
-import inputStyles from "../../styles/input.module.scss";
-import buttonStyles from "../../styles/button.module.scss";
-import linkStyles from "../../styles/link.module.scss";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react'
+import Spacer from '../spacer'
+import Google from '../icons/google'
+import Github from '../icons/github'
+import styles from './signup.module.scss'
+import inputStyles from '../../styles/input.module.scss'
+import buttonStyles from '../../styles/button.module.scss'
+import linkStyles from '../../styles/link.module.scss'
+import { isEmail } from '../../utils'
+import { Link } from 'react-router-dom'
 
 const Signup = () => {
+  const [value, setValue] = useState('')
+  const [isValidEmail, setIsValidEmail] = useState(false)
   return (
     <form className={styles.form}>
       <div className={styles.formContainer}>
@@ -19,9 +22,16 @@ const Signup = () => {
             type="email"
             name="email"
             placeholder="Email"
+            value={value}
+            onChange={(ev) => {
+              setValue(ev.target.value)
+              setIsValidEmail(isEmail(ev.target.value))
+            }}
           />
         </Spacer>
-        <button className={buttonStyles.formBtn}>Signup</button>
+        <button className={buttonStyles.formBtn} disabled={!isValidEmail}>
+          Signup
+        </button>
         <Spacer right="0" left="0" top="1.8em" bottom="1.8em">
           <span className={styles.seperator}>or</span>
         </Spacer>
@@ -44,7 +54,7 @@ const Signup = () => {
         </Link>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default Signup;
+export default Signup

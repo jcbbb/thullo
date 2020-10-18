@@ -18,8 +18,10 @@
 }
 
 .formBtn:disabled {
-    background: var(--gray-bg);
-    color: var(--gray-4);
+    opacity: 0.5;
+    box-shadow: none;
+    cursor: default;
+    pointer-events: none;
 }
 
 .authOption {
@@ -47,4 +49,5 @@
     background: var(--gray-bg);
     color: var(--gray-4);
     box-shadow: none;
+    pointer-events: none;
 }
