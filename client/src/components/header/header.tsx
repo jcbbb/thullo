@@ -4,7 +4,7 @@ import Logo from "../icons/thullo";
 import ArrowUp from "../icons/arrow-up";
 import ArrowDown from "../icons/arrow-down";
 import Application from "../icons/application";
-import styles from "./header.module.css";
+import styles from "./header.module.scss";
 
 const Header = () => {
   const [open, setOpen] = useState(false);

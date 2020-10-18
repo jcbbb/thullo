@@ -8,7 +8,12 @@
     font-size: 15px;
 }
 
+.formInput:invalid {
+    box-shadow: none;
+    border-color: var(--danger);
+    background: #fff;
+}
 .formInput:focus {
     background: transparent;
-    border: 1px solid var(--bg);
+    border-color: var(--bg);
 }

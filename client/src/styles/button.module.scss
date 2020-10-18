@@ -9,6 +9,12 @@
     font-weight: 600;
     color: #fff;
     cursor: pointer;
+    transition: var(--transition);
+}
+
+.formBtn:hover {
+    box-shadow: 0 3px 6px var(--primary-light);
+    background: var(--primary-dark);
 }
 
 .formBtn:disabled {
@@ -28,8 +34,15 @@
     box-shadow: var(--shadow-subtle);
     font-size: 15px;
     cursor: pointer;
+    border: 1px solid transparent;
+    transition: var(--transition);
+    color: var(--heading-text);
+    width: 100%;
 }
 
+.authOption:hover {
+    border-color: var(--gray-4);
+}
 .authOption:disabled {
     background: var(--gray-bg);
     color: var(--gray-4);

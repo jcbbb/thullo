@@ -13,12 +13,16 @@
 
 .formHeading {
     text-align: center;
+    color: var(--heading-text);
 }
 
 .seperator {
     display: block;
     text-align: center;
+    color: var(--gray-3);
+    font-size: 0.9em;
 }
+
 .authOptionText {
     display: block;
     margin-left: 1em;

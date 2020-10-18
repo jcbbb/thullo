@@ -1,0 +1,29 @@
+.form {
+    background: #fff;
+    box-shadow: var(--shadow-subtle);
+    width: 24em;
+    border-radius: var(--radius);
+}
+
+.formContainer {
+    padding: 1.8em;
+    display: flex;
+    flex-direction: column;
+}
+
+.formHeading {
+    text-align: center;
+    color: var(--heading-text);
+}
+
+.seperator {
+    display: block;
+    text-align: center;
+    color: var(--gray-3);
+    font-size: 0.9em;
+}
+
+.authOptionText {
+    display: block;
+    margin-left: 1em;
+}

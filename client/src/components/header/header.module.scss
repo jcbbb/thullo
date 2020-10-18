@@ -53,6 +53,11 @@
     cursor: pointer;
     font-size: 13px;
     margin-left: -6.1em;
+    transition: var(--transition);
+}
+
+.formBtn:hover {
+    background: var(--primary-dark);
 }
 
 .profile {
