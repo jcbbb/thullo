@@ -12,7 +12,9 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <div className={styles.headerLeft}>
-        <Logo viewBox="0 0 98 29" size={{ width: 96, height: 54 }} />
+        <Link to="/">
+          <Logo viewBox="0 0 98 29" size={{ width: 96, height: 54 }} />
+        </Link>
         <div className={styles.headerLeftInner}>
           <div className={styles.boardName}>
             <h2 className={styles.boardNameText}>Devchallenges Board</h2>
@@ -53,14 +55,14 @@ const Header = () => {
             </summary>
             <ul className={styles.links}>
               <li className={styles.linkItem}>
-                <a href="#" className={styles.link}>
+                <Link to="/settings" className={styles.link}>
                   Settings
-                </a>
+                </Link>
               </li>
               <li className={styles.linkItem}>
-                <a href="#" className={styles.link}>
+                <Link to="/logout" className={styles.link}>
                   Log out
-                </a>
+                </Link>
               </li>
             </ul>
           </details>
