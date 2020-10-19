@@ -56,8 +56,12 @@
     transition: var(--transition);
 }
 
-.formBtn:hover {
+.formBtn:hover:enabled {
     background: var(--primary-dark);
+}
+.formBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .profile {
