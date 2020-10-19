@@ -12,7 +12,7 @@
     transition: var(--transition);
 }
 
-.formBtn:hover {
+.formBtn:hover:enabled {
     box-shadow: 0 3px 6px var(--primary-light);
     background: var(--primary-dark);
 }
@@ -21,7 +21,6 @@
     opacity: 0.5;
     box-shadow: none;
     cursor: not-allowed;
-    pointer-events: none;
 }
 
 .authOption {
@@ -42,13 +41,12 @@
     width: 100%;
 }
 
-.authOption:hover {
+.authOption:hover:enabled {
     border-color: var(--gray-4);
 }
 .authOption:disabled {
     background: var(--gray-bg);
     color: var(--gray-4);
     box-shadow: none;
-    pointer-events: none;
     cursor: not-allowed;
 }
