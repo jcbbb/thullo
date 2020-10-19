@@ -9,11 +9,12 @@ import linkStyles from '../../styles/link.module.scss';
 import { isEmail, isMinNumber } from '../../utils';
 import { Link } from 'react-router-dom';
 
+interface IForm {
+  email?: string;
+  password?: string;
+}
+
 const Login = () => {
-  interface IForm {
-    email?: string;
-    password?: string;
-  }
   const [isValidEmail, setIsValidEmail] = useState(false);
   const [isValidPassword, setIsValidPassword] = useState(false);
   const [values, setValues] = useState<IForm>({});
