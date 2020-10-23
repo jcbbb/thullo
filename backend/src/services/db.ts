@@ -13,22 +13,22 @@ export const db = (() => {
     } catch (err) {
       console.error('Database connection error', err.message);
     }
+  };
 
-    const disconnect = async () => {
-      try {
-        await mongoose.connection.close();
-      } catch (err) {
-        console.error('Database disconnect error', err.message);
-      }
-    };
+  const disconnect = async () => {
+    try {
+      await mongoose.connection.close();
+    } catch (err) {
+      console.error('Database disconnect error', err.message);
+    }
+  };
 
-    const drop = async () => {
-      try {
-        await mongoose.connection.dropDatabase();
-      } catch (err) {
-        console.error('Could not drop the db', err.message);
-      }
-    };
+  const drop = async () => {
+    try {
+      await mongoose.connection.dropDatabase();
+    } catch (err) {
+      console.error('Could not drop the db', err.message);
+    }
   };
   return { connect, disconnect, drop };
 })();
