@@ -1,17 +1,30 @@
-import { Response } from 'express';
+import { Response, Request, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { IUser } from '../models/user';
-import {
-  ACCESS_TOKEN_SECRET,
-  REFRESH_TOKEN_SECRET,
-  ACCESS_TOKEN_EXPIRATION,
-  REFRESH_TOKEN_EXPIRATION,
-} from '../';
+import config from '../config';
 
 export const generateToken = (res: Response, user: IUser) => {
   const { _id, email, role } = user;
-  const accessToken = jwt.sign({ _id, email, role }, ACCESS_TOKEN_SECRET, {
-    expiresIn: ACCESS_TOKEN_EXPIRATION,
+  const accessToken = jwt.sign({ _id, email, role }, config.access_token_secret, {
+    expiresIn: config.access_token_expiration,
   });
-  const refreshToken = jwt.sign({});
+  const refreshToken = jwt.sign({}, config.refresh_token_secret, {
+    expiresIn: config.refresh_token_expiration,
+  });
+
+  res.cookie('access_token', accessToken, {
+    expires: new Date(Date.now() + config.access_token_expiration),
+    secure: true,
+    sameSite: true,
+    httpOnly: true,
+  });
+
+  res.cookie('refresh_token', refreshToken, {
+    expires: new Date(Date.now() + config.refresh_token_expiration),
+    secure: true,
+    sameSite: true,
+    httpOnly: true,
+  });
 };
+
+export const verifyToken = (res: Response, req: Request, next: NextFunction) => {};
