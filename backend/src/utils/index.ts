@@ -13,4 +13,5 @@ export const generateToken = (res: Response, user: IUser) => {
   const accessToken = jwt.sign({ _id, email, role }, ACCESS_TOKEN_SECRET, {
     expiresIn: ACCESS_TOKEN_EXPIRATION,
   });
+  const refreshToken = jwt.sign({});
 };

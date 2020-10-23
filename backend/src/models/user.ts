@@ -15,19 +15,6 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-userSchema.pre('save', function (next) {
-  bcrypt
-    .hash(this.password, 10)
-    .then((hash) => {
-      this.password = hash;
-    })
-    .catch((err) => next(err));
-});
-
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
-
 export interface IUser extends Document {
   _id: Types.ObjecId;
   name: string;
@@ -41,6 +28,19 @@ export interface IUser extends Document {
   createdAt: Types.Date;
   updatedAt: Types.Date;
 }
+
+userSchema.pre('save', function (next) {
+  bcrypt
+    .hash(this.password, 10)
+    .then((hash) => {
+      this.password = hash;
+    })
+    .catch((err) => next(err));
+});
+
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
 const User = model<IUser>('users', userSchema);
 
