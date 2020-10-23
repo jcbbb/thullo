@@ -2,13 +2,38 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const { MONGO_URI, NODE_ENV, MONGO_URI_DEV, MONGO_URI_TEST } = process.env as {
+type IEnv = {
   MONGO_URI: string;
   MONGO_URI_DEV: string;
   MONGO_URI_TEST: string;
   NODE_ENV: string;
+  ACCESS_TOKEN_SECRET: string;
+  REFRESH_TOKEN_SECRET: string;
+  ACCESS_TOKEN_EXPIRATION: string;
+  REFRESH_TOKEN_EXPIRATION: string;
 };
+
+const {
+  MONGO_URI,
+  NODE_ENV,
+  MONGO_URI_DEV,
+  MONGO_URI_TEST,
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRATION,
+  REFRESH_TOKEN_EXPIRATION,
+}: IEnv = process.env;
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
-export { MONGO_URI_DEV, MONGO_URI_TEST, MONGO_URI, NODE_ENV, PORT };
+export {
+  MONGO_URI_DEV,
+  MONGO_URI_TEST,
+  MONGO_URI,
+  NODE_ENV,
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+  ACCESS_TOKEN_EXPIRATION,
+  REFRESH_TOKEN_EXPIRATION,
+  PORT,
+};
