@@ -1,12 +1,11 @@
 import express from 'express';
 import config from './config';
+import { db } from './services/db';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send({ message: 'Hello world!' }).status(200);
-});
+app.use(express.json());
 
-app.listen(config.port, () => {
-  console.log(`Listening on port ${config.port}`);
+db.connect().then(() => {
+  app.listen(config.port, () => console.log(`Server started on port ${config.port}`));
 });
