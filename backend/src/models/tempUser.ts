@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const tempUserSchema = new Schema({
@@ -27,6 +27,6 @@ tempUserSchema.methods.compareAuthCode = function (authCode) {
   return bcrypt.compare(authCode, this.authCode);
 };
 
-const TempUser = model<ITempUser>('tempusers', tempUserSChema);
+const TempUser = model<ITempUser>('tempusers', tempUserSchema);
 
 export default TempUser;
