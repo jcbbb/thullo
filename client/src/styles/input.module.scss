@@ -17,3 +17,9 @@
     background: transparent;
     border-color: var(--bg);
 }
+
+.errorText {
+    color: var(--danger);
+    font-size: 0.85em;
+    padding: 0 0.7em;
+}
