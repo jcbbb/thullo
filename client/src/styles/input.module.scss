@@ -6,14 +6,10 @@
     padding: 0.7em;
     border: 1px solid transparent;
     font-size: 15px;
+    border-radius: var(--radius-small);
 }
 
-.formInput:invalid {
-    box-shadow: none;
-    border-color: var(--danger);
-    background: #fff;
-}
-.formInput:focus {
+.formInput:not(.errorInput):focus {
     background: transparent;
     border-color: var(--bg);
 }
@@ -22,4 +18,9 @@
     color: var(--danger);
     font-size: 0.85em;
     padding: 0 0.7em;
+}
+.errorInput {
+    box-shadow: none;
+    border-color: var(--danger);
+    background: #fff;
 }
