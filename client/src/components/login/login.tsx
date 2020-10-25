@@ -6,7 +6,6 @@ import styles from './login.module.scss';
 import inputStyles from '../../styles/input.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
-import { isMinNumber } from '../../utils';
 import { Link } from 'react-router-dom';
 
 interface IForm {
@@ -15,7 +14,6 @@ interface IForm {
 }
 
 const Login = () => {
-  const [isValidPassword, setIsValidPassword] = useState(false);
   const [values, setValues] = useState<IForm>({});
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -54,9 +52,7 @@ const Login = () => {
             }}
           />
         </Spacer>
-        <button className={buttonStyles.formBtn} disabled={!isValidPassword}>
-          Login
-        </button>
+        <button className={buttonStyles.formBtn}>Login</button>
         <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
           <span className={styles.seperator}>or</span>
         </Spacer>
