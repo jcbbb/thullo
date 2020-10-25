@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../icons/thullo';
-import ArrowUp from '../icons/arrow-up';
-import ArrowDown from '../icons/arrow-down';
+import ChevronUp from '../icons/chevron-up';
+import ChevronDown from '../icons/chevron-down';
 import Application from '../icons/application';
 import styles from './header.module.scss';
 
@@ -46,9 +46,9 @@ const Header = () => {
             <summary className={styles.summary} onClick={() => setOpen((open) => !open)}>
               <span className={styles.summaryText}>Xanthe Neal</span>
               {!open ? (
-                <ArrowUp color="var(--heading-text)" />
+                <ChevronUp color="var(--heading-text)" />
               ) : (
-                <ArrowDown color="var(--heading-text)" />
+                <ChevronDown color="var(--heading-text)" />
               )}
             </summary>
             <ul className={styles.links}>
