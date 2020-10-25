@@ -5,10 +5,29 @@
     border-radius: var(--radius);
 }
 
+.backBtn {
+    outline: none;
+    border: none;
+    position: absolute;
+    top: 1.8em;
+    width: 2.4em;
+    height: 2.4em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-small);
+    background: transparent;
+    &:hover {
+        background: var(--bg);
+    }
+}
+
 .formContainer {
     padding: 1.8em;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .formHeading {
