@@ -1,12 +1,22 @@
-type Value = any;
-const emailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+export const request = async (endpoint: string, { body, ...customConfig }: any = {}) => {
+  const headers = { 'content-type': 'application/json' };
 
-export const isEmail = () => (value: Value): boolean => emailRegex.test(value);
+  const config = {
+    method: body ? 'POST' : 'GET',
+    body: body ? JSON.stringify(body) : undefined,
+    ...customConfig,
+    headers: {
+      ...headers,
+      ...customConfig.headers,
+    },
+  };
 
-export const isNumber = (value: Value): boolean => {
-  return typeof parseFloat(value) === 'number' && !isNaN(parseFloat(value)) && !isNaN(value);
-};
-
-export const isMinNumber = (min: number) => (value: Value): boolean => {
-  return parseFloat(value.length) >= min;
+  return window.fetch(endpoint, config).then(async (response) => {
+    if (response.status === 401) {
+      // auth.logout();
+      window.location.assign(window.location.origin);
+      return;
+    }
+    return response;
+  });
 };
