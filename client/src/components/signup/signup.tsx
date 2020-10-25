@@ -5,24 +5,41 @@ import Github from '../icons/github';
 import styles from './signup.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
-import FormContextProvider from '../../context/FormContext';
-import { isEmail } from '../../utils';
-import { Link } from 'react-router-dom';
 import FormInput from '../formInput/formInput';
-import Step from '../step/step';
+import ArrowLeft from '../icons/arrow-left';
+import { useCallback } from 'react';
+import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
+import { Link } from 'react-router-dom';
+import { Formiz, useForm, FormizStep } from '@formiz/core';
 
 const Signup = () => {
+  const myForm = useForm();
+
+  const handleSubmit = useCallback(() => {
+    console.log(myForm.values);
+  }, [myForm.values]);
+
   return (
-    <FormContextProvider>
-      <form noValidate className={styles.form}>
+    <Formiz connect={myForm} onValidSubmit={handleSubmit}>
+      <form noValidate className={styles.form} onSubmit={myForm.submit}>
         <div className={styles.formContainer}>
           <h3 className={styles.formHeading}>Signup</h3>
-          <Spacer left="0" right="0" top="1.8em">
-            <Step name="step_1">
+          {!myForm.isFirstStep && (
+            <button className={styles.backBtn} onClick={myForm.prevStep} type="button">
+              <ArrowLeft size={{ width: 20, height: 20 }} color="var(--primary)" />
+            </button>
+          )}
+          <FormizStep name="step_1">
+            <Spacer left="0" right="0" top="1.8em">
               <FormInput
                 type="email"
                 name="email"
                 placeholder="Email"
+                required="Email is requied"
+                autoComplete="current-email"
+                onChange={(value: string) => {
+                  console.log(isEmail()(value));
+                }}
                 validations={[
                   {
                     rule: isEmail(),
@@ -30,9 +47,67 @@ const Signup = () => {
                   },
                 ]}
               />
-            </Step>
-          </Spacer>
-          <button className={buttonStyles.formBtn}>Signup</button>
+            </Spacer>
+          </FormizStep>
+          <FormizStep name="step_2">
+            <Spacer left="0" right="0" top="1.8em">
+              <FormInput
+                type="text"
+                name="authCode"
+                placeholder="Auth code"
+                required="Auth code is required"
+                autoComplete="current-authcode"
+                validations={[
+                  {
+                    rule: isNumber(),
+                    message: 'Only numeric values are allowed',
+                  },
+                  {
+                    rule: isMinLength(6),
+                    message: 'Auth code should be 6 digits',
+                  },
+                  {
+                    rule: isMaxLength(6),
+                    message: 'Auth code should be 6 digits',
+                  },
+                ]}
+              />
+            </Spacer>
+          </FormizStep>
+          <FormizStep name="step_3">
+            <Spacer left="0" right="0" top="1.8em">
+              <FormInput
+                type="text"
+                name="name"
+                placeholder="Your name"
+                required="This field is required"
+                autoComplete="current-name"
+              />
+            </Spacer>
+            <Spacer left="0" right="0" top="0" bottom="1.8em">
+              <FormInput
+                type="password"
+                name="password"
+                placeholder="Password"
+                required="Password should be at least 6 characters"
+                autoComplete="current-password"
+                validations={[
+                  {
+                    rule: isMinLength(6),
+                    message: 'Password should be at least 6 characters',
+                  },
+                ]}
+              />
+            </Spacer>
+          </FormizStep>
+          <button
+            type="submit"
+            disabled={!myForm.isStepValid}
+            className={buttonStyles.formBtn}
+            onClick={myForm.nextStep}
+          >
+            {myForm.isLastStep ? 'Submit' : 'Next'}
+          </button>
           <Spacer right="0" left="0" top="1.8em" bottom="1.8em">
             <span className={styles.seperator}>or</span>
           </Spacer>
@@ -55,7 +130,7 @@ const Signup = () => {
           </Link>
         </div>
       </form>
-    </FormContextProvider>
+    </Formiz>
   );
 };
 
