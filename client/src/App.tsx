@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Header from './components/header/header';
 import Login from './components/login/login';
 import Signup from './components/signup/signup';
