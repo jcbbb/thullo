@@ -1,6 +1,8 @@
 import User from '../models/user';
 import TempUser from '../models/tempUser';
 import { BadRequestError } from '../utils/errors';
+import { generateToken, randomNumber } from '../utils';
+import Mail from './mail';
 
 const Auth = (() => {
   const login = async (email: string, password: string) => {
@@ -10,20 +12,20 @@ const Auth = (() => {
       throw new BadRequestError('User not found');
     }
 
-    const isMatch = await user.comparePassword(password);
+    const isMatch = user.comparePassword(password);
 
     if (!isMatch) {
       throw new BadRequestError('Incorrect password or email');
     }
 
-    await generateToken(user);
+    const { accessToken, refreshToken } = generateToken(user);
 
-    return { user };
+    return { user, accessToken, refreshToken };
   };
 
   const signup = async (email: string, password: string, name: string, authCode: string) => {
     const candidate = await User.findOne({ email });
-    const tempUserCandidate = await User.findOne({ email });
+    const tempUserCandidate = await TempUser.findOne({ email });
 
     if (candidate) {
       throw new BadRequestError('User already  exists');
@@ -41,18 +43,20 @@ const Auth = (() => {
 
     const user = new User({ email, password, name });
     await user.save();
-    await generateToken(user);
-    return { user };
+
+    const { refreshToken, accessToken } = generateToken(user);
+
+    return { user, refreshToken, accessToken };
   };
 
-  const verify = async (email: string, authCode) => {
+  const verify = async (email: string, authCode: string) => {
     const candidate = await TempUser.findOne({ email });
 
     if (!candidate) {
       throw new BadRequestError('User does not exist');
     }
 
-    const isMatch = await candidate.compareAuthCode(authCode);
+    const isMatch = candidate.compareAuthCode(authCode);
 
     if (!isMatch) {
       throw new BadRequestError('Auth code does not match');
@@ -61,14 +65,12 @@ const Auth = (() => {
     return isMatch;
   };
 
-  const check = async (email: string) => {
+  const check = async (email: string): Promise<void | BadRequestError> => {
     const existingEmail = await User.findOne({ email });
 
     if (existingEmail) {
       throw new BadRequestError('Email is already taken');
     }
-
-    return !!existingEmail;
   };
 
   const createTempUser = async (email: string) => {
@@ -82,8 +84,11 @@ const Auth = (() => {
     const tempUser = new TempUser({ email, authCode });
 
     await tempUser.save();
-    await Mail.send(authCode);
+    await Mail.send(tempUser.email, 'auth-code', {
+      authCode,
+    });
   };
+
   return { login, signup, verify, check, createTempUser };
 })();
 
