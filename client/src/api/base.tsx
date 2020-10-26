@@ -1,18 +1,16 @@
-import { AuthEndpoints } from './auth';
+import { IAuthEndpoints } from './auth';
+import { kebabCaseToCamel } from '../utils';
 
 interface Entities {
-  auth: (resourceUrl: string) => AuthEndpoints;
+  auth: IAuthEndpoints;
 }
 
-const API = (url: string, entities: Entities) => {
+const API = (entities: Entities) => {
   const endpoints = {} as Entities;
-  const kebabCaseToCamel = (str: string) => {
-    return str.replace(/(\-\w)/g, (matches) => matches[1].toUpperCase());
-  };
 
-  for (const [name, cb] of Object.entries(entities)) {
+  for (const [name, methods] of Object.entries(entities)) {
     const cleanName = kebabCaseToCamel(name) as keyof Entities;
-    endpoints[cleanName] = cb(`${url}/${cleanName}`);
+    endpoints[cleanName] = methods;
   }
 
   return { ...endpoints };
