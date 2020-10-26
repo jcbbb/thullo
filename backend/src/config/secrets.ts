@@ -11,6 +11,9 @@ type IEnv = {
   REFRESH_TOKEN_SECRET: string;
   ACCESS_TOKEN_EXPIRATION: string;
   REFRESH_TOKEN_EXPIRATION: string;
+  SMTP_SERVER: string;
+  SMTP_USERNAME: string;
+  SMTP_PASSWORD: string;
 };
 
 const {
@@ -22,7 +25,10 @@ const {
   REFRESH_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRATION,
   REFRESH_TOKEN_EXPIRATION,
-}: IEnv = process.env;
+  SMTP_SERVER,
+  SMTP_USERNAME,
+  SMTP_PASSWORD,
+} = process.env as IEnv;
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
 
@@ -35,5 +41,8 @@ export {
   REFRESH_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRATION,
   REFRESH_TOKEN_EXPIRATION,
+  SMTP_SERVER,
+  SMTP_USERNAME,
+  SMTP_PASSWORD,
   PORT,
 };

@@ -7,6 +7,9 @@ import {
   REFRESH_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRATION,
   REFRESH_TOKEN_EXPIRATION,
+  SMTP_SERVER,
+  SMTP_USERNAME,
+  SMTP_PASSWORD,
   PORT,
 } from './secrets';
 
@@ -21,6 +24,9 @@ type IConfig = {
     refresh_token_secret: string;
     access_token_expiration: string;
     refresh_token_expiration: string;
+    smtp_server: string;
+    smtp_username: string;
+    smtp_password: string;
   };
 };
 
@@ -33,6 +39,9 @@ const configs: IConfig = {
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,
     refresh_token_expiration: REFRESH_TOKEN_EXPIRATION,
+    smtp_server: SMTP_SERVER,
+    smtp_username: SMTP_USERNAME,
+    smtp_password: SMTP_PASSWORD,
   },
   production: {
     mongoUri: MONGO_URI,
@@ -42,6 +51,9 @@ const configs: IConfig = {
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,
     refresh_token_expiration: REFRESH_TOKEN_EXPIRATION,
+    smtp_server: SMTP_SERVER,
+    smtp_username: SMTP_USERNAME,
+    smtp_password: SMTP_PASSWORD,
   },
   test: {
     mongoUri: MONGO_URI_TEST,
@@ -51,6 +63,9 @@ const configs: IConfig = {
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,
     refresh_token_expiration: REFRESH_TOKEN_EXPIRATION,
+    smtp_server: SMTP_SERVER,
+    smtp_username: SMTP_USERNAME,
+    smtp_password: SMTP_PASSWORD,
   },
 };
 
