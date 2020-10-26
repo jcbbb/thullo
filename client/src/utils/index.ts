@@ -1,5 +1,5 @@
 export const request = async (endpoint: string, { body, ...customConfig }: any = {}) => {
-  const headers = { 'content-type': 'application/json' };
+  const headers = { 'Content-Type': 'application/json' };
 
   const config = {
     method: body ? 'POST' : 'GET',
@@ -19,4 +19,8 @@ export const request = async (endpoint: string, { body, ...customConfig }: any =
     }
     return response;
   });
+};
+
+export const kebabCaseToCamel = (str: string) => {
+  return str.replace(/(\-\w)/g, (matches) => matches[1].toUpperCase());
 };
