@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useCallback } from 'react';
 import Spacer from '../spacer';
 import Google from '../icons/google';
 import Github from '../icons/github';
@@ -7,7 +8,6 @@ import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
 import FormInput from '../formInput/formInput';
 import ArrowLeft from '../icons/arrow-left';
-import { useCallback } from 'react';
 import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
 import { Link } from 'react-router-dom';
 import { Formiz, useForm, FormizStep } from '@formiz/core';
@@ -35,10 +35,12 @@ const Signup = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
-                required="Email is requied"
+                required="Email is required"
                 autoComplete="current-email"
                 onChange={(value: string) => {
-                  console.log(isEmail()(value));
+                  if (isEmail()(value)) {
+                    console.log('Make request here to check existing email');
+                  }
                 }}
                 validations={[
                   {
