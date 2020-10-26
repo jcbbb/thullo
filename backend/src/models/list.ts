@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 const listSchema = new Schema(
   {
@@ -10,7 +10,7 @@ const listSchema = new Schema(
 );
 
 export interface IList extends Document {
-  _id: Types.ObjecId;
+  _id: Types.ObjectId;
   title: string;
   order: number;
   board_id: Types.ObjectId;

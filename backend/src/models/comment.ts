@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 const commentSchema = new Schema(
   {
@@ -10,12 +10,12 @@ const commentSchema = new Schema(
 );
 
 export interface IComment extends Document {
-  _id: Types.ObjecId;
+  _id: Types.ObjectId;
   card_id: Types.ObjectId;
   user_id: Types.ObjectId;
   text: string;
-  cretedAt: Types.Date;
-  updatedAt: Types.Date;
+  cretedAt: Date;
+  updatedAt: Date;
 }
 
 const Comment = model<IComment>('cards', commentSchema);
