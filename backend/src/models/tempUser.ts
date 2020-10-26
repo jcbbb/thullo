@@ -11,19 +11,21 @@ export interface ITempUser extends Document {
   _id: Types.ObjectId;
   email: string;
   authCode: string;
-  createdAt: Types.Date;
+  createdAt: Date;
+  compareAuthCode: (authCode: string) => boolean;
 }
 
 tempUserSchema.pre('save', function (next) {
+  const tempUser = this as ITempUser;
   bcrypt
-    .hash(this.authCode, 10)
+    .hash(tempUser.authCode, 10)
     .then((hash) => {
-      this.authCode = hash;
+      tempUser.authCode = hash;
     })
     .catch((err) => next(err));
 });
 
-tempUserSchema.methods.compareAuthCode = function (authCode) {
+tempUserSchema.methods.compareAuthCode = function (authCode: string) {
   return bcrypt.compare(authCode, this.authCode);
 };
 

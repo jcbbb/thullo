@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 const boardSchema = new Schema(
   {
@@ -15,15 +15,15 @@ const boardSchema = new Schema(
 );
 
 export interface IBoard extends Document {
-  _id: Types.ObjecId;
+  _id: Types.ObjectId;
   title: string;
   cover_photo_url: string;
   private: boolean;
   members: Types.ObjectId[];
   lists: Types.ObjectId[];
   creator: Types.ObjectId;
-  cretedAt: Types.Date;
-  updatedAt: Types.Date;
+  cretedAt: Date;
+  updatedAt: Date;
 }
 
 const Board = model<IBoard>('boards', boardSchema);

@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 type Obj = {
   [key: string]: string;
@@ -19,7 +19,7 @@ const cardSchema = new Schema(
 );
 
 export interface ICard extends Document {
-  _id: Types.ObjecId;
+  _id: Types.ObjectId;
   title: string;
   description: string;
   cover_photo_url: string;
@@ -28,8 +28,8 @@ export interface ICard extends Document {
   attachments: Obj;
   order: number;
   list_id: Types.ObjectId;
-  cretedAt: Types.Date;
-  updatedAt: Types.Date;
+  cretedAt: Date;
+  updatedAt: Date;
 }
 
 const Card = model<ICard>('cards', cardSchema);

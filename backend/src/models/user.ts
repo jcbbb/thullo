@@ -1,4 +1,4 @@
-import { Document, mode, Schema, Types } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 const userSchema = new Schema(
@@ -16,7 +16,7 @@ const userSchema = new Schema(
 );
 
 export interface IUser extends Document {
-  _id: Types.ObjecId;
+  _id: Types.ObjectId;
   name: string;
   email: string;
   password: string;
@@ -25,20 +25,23 @@ export interface IUser extends Document {
   gravatar_url: string;
   blocked: boolean;
   role: string;
-  createdAt: Types.Date;
-  updatedAt: Types.Date;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword: (candidatePassword: string) => boolean;
 }
 
 userSchema.pre('save', function (next) {
+  const user = this as IUser;
+  if (!user.isModified('password')) return next();
   bcrypt
-    .hash(this.password, 10)
+    .hash(user.password, 10)
     .then((hash) => {
-      this.password = hash;
+      user.password = hash;
     })
     .catch((err) => next(err));
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
