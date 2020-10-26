@@ -52,6 +52,13 @@ h4 {
     font-size: 0.875em;
 }
 
+details summary::-webkit-details-marker {
+  display:none;
+}
+
+details summary::marker {
+    display: none;
+}
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
