@@ -5,7 +5,28 @@ type ErrorParam = string | number;
 type ErrorMessage = string;
 type ErrorObject = Record<ErrorParam, ErrorMessage>;
 
-export const emailValidationRules = () => [body('email').normalizeEmail().isEmail()];
+export const emailValidationRules = () => [
+  body('email')
+    .notEmpty()
+    .isString()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Email should be valid'),
+];
+
+export const authCodeValidationRules = () => [
+  body('authCode')
+    .notEmpty()
+    .isString()
+    .isLength({ min: 6, max: 6 })
+    .withMessage('Auth code must be 6 characters long and not empty'),
+  body('email')
+    .notEmpty()
+    .isString()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Email should be valid'),
+];
 
 export const validate = (req: Request, res: Response, next: NextFunction) => {
   const errors = validationResult(req);
@@ -21,4 +42,3 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
     errors: extractedErrors,
   });
 };
-
