@@ -3,6 +3,12 @@
     box-shadow: var(--shadow-subtle);
     width: 24em;
     border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.formDisabled * {
+    pointer-events: none;
+    opacity: 0.7;
 }
 
 .backBtn {
