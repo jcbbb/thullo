@@ -1,0 +1,64 @@
+.indeterminateProgress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: none;
+    height: 4px;
+    background: var(--primary-light);
+    color: var(--primary);
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.indeterminateProgress::-webkit-progress-bar {
+    background-color: transparent;
+}
+
+/* Determinate */
+.indeterminateProgress::-webkit-progress-value {
+    background-color: currentColor;
+    transition: all 0.2s;
+}
+
+.indeterminateProgress::-moz-progress-bar {
+    background-color: currentColor;
+    transition: all 0.2s;
+}
+
+.indeterminateProgress::-ms-fill {
+    border: none;
+    background-color: currentColor;
+    transition: all 0.2s;
+}
+
+/* Indeterminate */
+.indeterminateProgress:indeterminate {
+    background-size: 200% 100%;
+    background-image: linear-gradient(to right, transparent 50%, currentColor 50%, currentColor 60%, transparent 60%, transparent 71.5%, currentColor 71.5%, currentColor 84%, transparent 84%);
+    animation: indeterminateProgress 2s infinite linear;
+}
+
+.indeterminateProgress:indeterminate::-moz-progress-bar {
+    background-color: transparent;
+}
+
+.indeterminateProgress:indeterminate::-ms-fill {
+    animation-name: none;
+}
+
+@keyframes indeterminateProgress {
+    0% {
+        background-size: 200% 100%;
+        background-position: left -31.25% top 0%;
+    }
+    50% {
+        background-size: 800% 100%;
+        background-position: left -49% top 0%;
+    }
+    100% {
+        background-size: 400% 100%;
+        background-position: left -102% top 0%;
+    }
+}
