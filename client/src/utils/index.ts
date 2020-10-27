@@ -17,10 +17,11 @@ export const request = async (endpoint: string, { body, ...customConfig }: any =
       window.location.assign(window.location.origin);
       return;
     }
+
     return response;
   });
 };
 
 export const kebabCaseToCamel = (str: string) => {
-  return str.replace(/(\-\w)/g, (matches) => matches[1].toUpperCase());
+  return str.replace(/(-\w)/g, (matches) => matches[1].toUpperCase());
 };
