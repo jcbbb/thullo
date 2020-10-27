@@ -2,7 +2,7 @@ import User from '../models/user';
 import TempUser from '../models/tempUser';
 import { BadRequestError } from '../utils/errors';
 import { generateToken, randomNumber } from '../utils';
-import Mail from './mail';
+import Mail, { IMailOptions } from './mail';
 
 const Auth = (() => {
   const login = async (email: string, password: string) => {
@@ -56,7 +56,7 @@ const Auth = (() => {
       throw new BadRequestError('User does not exist');
     }
 
-    const isMatch = candidate.compareAuthCode(authCode);
+    const isMatch = await candidate.compareAuthCode(authCode);
 
     if (!isMatch) {
       throw new BadRequestError('Auth code does not match');
@@ -84,9 +84,14 @@ const Auth = (() => {
     const tempUser = new TempUser({ email, authCode });
 
     await tempUser.save();
-    await Mail.send(tempUser.email, 'auth-code', {
-      authCode,
-    });
+    await Mail.send({
+      to: tempUser.email,
+      template: 'auth-code',
+      subject: `Your auth code is ${authCode}`,
+      vars: {
+        authCode,
+      },
+    } as IMailOptions);
   };
 
   return { login, signup, verify, check, createTempUser };
