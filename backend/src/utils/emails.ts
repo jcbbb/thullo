@@ -16,7 +16,7 @@ export const templates = {
     render: buildTemplateRender<{
       authCode: string;
     }>('auth-code'),
-    subject: (subject: string = `Your auth code`) => subject,
+    subject: 'Auth code for Thullo',
   },
 };
 
