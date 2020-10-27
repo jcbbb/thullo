@@ -12,7 +12,7 @@ export interface ITempUser extends Document {
   email: string;
   authCode: string;
   createdAt: Date;
-  compareAuthCode: (authCode: string) => boolean;
+  compareAuthCode: (authCode: string) => Promise<boolean>;
 }
 
 tempUserSchema.pre('save', function (next) {
@@ -21,12 +21,13 @@ tempUserSchema.pre('save', function (next) {
     .hash(tempUser.authCode, 10)
     .then((hash) => {
       tempUser.authCode = hash;
+      next();
     })
     .catch((err) => next(err));
 });
 
-tempUserSchema.methods.compareAuthCode = function (authCode: string) {
-  return bcrypt.compare(authCode, this.authCode);
+tempUserSchema.methods.compareAuthCode = async function (authCode: string): Promise<boolean> {
+  return await bcrypt.compare(authCode, this.authCode);
 };
 
 const TempUser = model<ITempUser>('tempusers', tempUserSchema);
