@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import config from '../config';
 import { Options } from 'nodemailer/lib/smtp-transport';
 import { templates, TemplateKey } from '../utils/emails';
+import { MailError } from '../utils/errors';
 
 type VariableName = string | number;
 type VariableValue = string | number;
@@ -10,11 +11,17 @@ type Vars = {
   [key in VariableName]: VariableValue;
 };
 
+export interface IMailOptions {
+  to: string;
+  template: string;
+  subject?: string;
+  vars?: Vars;
+}
+
 const smtp = nodemailer.createTransport({
-  smtp: {
-    host: config.smtp_server,
-    port: 465,
-  },
+  host: config.smtp_server,
+  port: 465,
+  secure: true,
   auth: {
     user: config.smtp_username,
     pass: config.smtp_password,
@@ -22,14 +29,17 @@ const smtp = nodemailer.createTransport({
 } as Options);
 
 const Mail = (() => {
-  const send = async (to: string, template: string, vars: Vars) => {
-    const res = await smtp.sendMail({
-      to,
-      from: config.smtp_username,
-      subject: templates[template as TemplateKey].subject(`Your auth code is`),
-      html: templates[template as TemplateKey].render(vars as never),
-    });
-    return res;
+  const send = async ({ to, template, subject, vars }: IMailOptions) => {
+    try {
+      await smtp.sendMail({
+        to,
+        from: 'Thullo <verify@thullo.com>',
+        subject: subject || templates[template as TemplateKey].subject,
+        html: templates[template as TemplateKey].render(vars as never),
+      });
+    } catch (err) {
+      throw new MailError('Something went wrong with email delivery');
+    }
   };
 
   return { send };
