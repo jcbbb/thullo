@@ -38,3 +38,9 @@ export class ResourceNotFoundError extends DomainError {
     super(message, statusCode);
   }
 }
+
+export class MailError extends DomainError {
+  constructor(message: string, statusCode: number = 502) {
+    super(message, statusCode);
+  }
+}
