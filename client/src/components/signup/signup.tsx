@@ -75,11 +75,6 @@ const Signup = () => {
           ...prevState,
           authCodeVerified: false,
         }));
-        if (myForm.invalidateFields) {
-          myForm.invalidateFields({
-            authCode: (err as any).message,
-          });
-        }
       },
     }
   );
@@ -90,12 +85,34 @@ const Signup = () => {
     console.log(myForm.values);
   }, [myForm.values]);
 
+  const submitStep = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.persist();
+    if (event) event.preventDefault();
+
+    if (!myForm.currentStep || !(myForm.currentStep as any).isValid) {
+      myForm.submitStep && myForm.submitStep(event);
+      return;
+    }
+
+    const stepName = (myForm.currentStep as any).name;
+    if (stepName === 'step_1') {
+      await createTempUser(myForm.values?.email);
+    }
+
+    if (stepName === 'step_2') {
+      const { email, authCode } = myForm.values;
+      await verifyAuthCode({ email, authCode });
+    }
+
+    myForm.submitStep && myForm.submitStep(event);
+  };
+
   return (
     <Formiz connect={myForm} onValidSubmit={handleSubmit}>
       <form
         noValidate
         className={cn(styles.form, { [styles.formDisabled]: shouldShowProgress })}
-        onSubmit={!!myForm?.steps?.length ? myForm.submitStep : myForm.submit}
+        onSubmit={submitStep}
       >
         <div className={styles.formContainer}>
           {shouldShowProgress && <Indeterminate />}
