@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import Spacer from '../spacer';
 import Google from '../icons/google';
 import Github from '../icons/github';
@@ -11,101 +11,52 @@ import ArrowLeft from '../icons/arrow-left';
 import Indeterminate from '../indeterminate/indeterminate';
 import api from '../../api';
 import cn from 'classnames';
+import useAsync from '../../hooks/useAsync';
 import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
 import { Link } from 'react-router-dom';
 import { Formiz, useForm, FormizStep } from '@formiz/core';
-import { useMutation } from 'react-query';
-
-interface IState {
-  emailTaken: boolean;
-  tempUserCreated: boolean;
-  authCodeVerified: boolean;
-}
 
 const Signup = () => {
   const myForm = useForm();
 
-  const [state, setState] = useState<IState>({
-    emailTaken: false,
-    tempUserCreated: false,
-    authCodeVerified: false,
-  });
+  const [checkExistingEmail, emailState] = useAsync(api.auth.checkEmail);
+  const [createTempUser, tempUserState] = useAsync(api.auth.createTempUser);
+  const [verifyAuthCode, authCodeState] = useAsync(api.auth.verifyAuthCode);
 
-  const [checkExistingEmail, { isLoading: isEmailChecking }] = useMutation(
-    (email: string) => api.auth.checkEmail(email),
-    {
-      onSuccess: () => setState((prevState) => ({ ...prevState, emailTaken: false })),
-      onError: () => setState((prevState) => ({ ...prevState, emailTaken: true })),
-    }
-  );
-
-  const [createTempUser, { isLoading: isTempUserCreating }] = useMutation(
-    (email: string) => api.auth.createTempUser(email),
-    {
-      onSuccess: () => {
-        setState((prevState) => ({
-          ...prevState,
-          tempUserCreated: true,
-        }));
-        if (myForm.nextStep) myForm.nextStep();
-      },
-      onError: () => {
-        setState((prevState) => ({
-          ...prevState,
-          tempUserCreated: false,
-        }));
-      },
-    }
-  );
-
-  const [verifyAuthCode, { isLoading: isVerifying }] = useMutation(
-    ({ email, authCode }: { email: string; authCode: string }) =>
-      api.auth.verifyAuthCode(email, authCode),
-    {
-      onSuccess: (data, vars) => {
-        console.log('Data', data);
-        setState((prevState) => ({
-          ...prevState,
-          authCodeVerified: true,
-        }));
-      },
-      onError: (err, vars) => {
-        console.log(err);
-        setState((prevState) => ({
-          ...prevState,
-          authCodeVerified: false,
-        }));
-      },
-    }
-  );
-
-  const shouldShowProgress = isTempUserCreating || isVerifying;
+  const shouldShowProgress = useMemo(() => tempUserState.isLoading || authCodeState.isLoading, [
+    tempUserState.isLoading,
+    authCodeState.isLoading,
+  ]);
 
   const handleSubmit = useCallback(() => {
     console.log(myForm.values);
   }, [myForm.values]);
 
-  const submitStep = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.persist();
-    if (event) event.preventDefault();
+  const submitStep = useCallback(
+    async (event: React.FormEvent<HTMLFormElement>) => {
+      event.persist();
+      if (event) event.preventDefault();
 
-    if (!myForm.currentStep || !(myForm.currentStep as any).isValid) {
+      if (!myForm.currentStep || !(myForm.currentStep as any).isValid) {
+        myForm.submitStep && myForm.submitStep(event);
+        return;
+      }
+
+      const stepName = (myForm.currentStep as any).name;
+      if (stepName === 'step_1') {
+        await createTempUser(myForm.values?.email);
+        console.log('Created');
+      }
+
+      if (stepName === 'step_2') {
+        const { email, authCode } = myForm.values;
+        await verifyAuthCode(email, authCode);
+      }
+
       myForm.submitStep && myForm.submitStep(event);
-      return;
-    }
-
-    const stepName = (myForm.currentStep as any).name;
-    if (stepName === 'step_1') {
-      await createTempUser(myForm.values?.email);
-    }
-
-    if (stepName === 'step_2') {
-      const { email, authCode } = myForm.values;
-      await verifyAuthCode({ email, authCode });
-    }
-
-    myForm.submitStep && myForm.submitStep(event);
-  };
+    },
+    [authCodeState.isError, myForm, createTempUser, verifyAuthCode]
+  );
 
   return (
     <Formiz connect={myForm} onValidSubmit={handleSubmit}>
@@ -141,9 +92,9 @@ const Signup = () => {
                     message: 'Provide a valid email',
                   },
                   {
-                    rule: () => !state.emailTaken,
-                    deps: [state.emailTaken],
-                    message: 'Email is already taken',
+                    rule: () => !emailState.isError,
+                    message: emailState.error?.message,
+                    deps: [emailState.isError, emailState.error],
                   },
                 ]}
               />
@@ -202,9 +153,7 @@ const Signup = () => {
           </FormizStep>
           <button
             type="submit"
-            disabled={
-              isTempUserCreating || isEmailChecking || state.emailTaken || !myForm.isStepValid
-            }
+            disabled={emailState.isError || !myForm.isStepValid}
             className={buttonStyles.formBtn}
           >
             {myForm.isLastStep ? 'Submit' : 'Next'}
