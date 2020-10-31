@@ -1,0 +1,73 @@
+.boardStatus {
+    position: relative;
+}
+
+.summary {
+    background: var(--gray-bg);
+    color: var(--gray-3);
+    display: flex;
+    align-items:center;
+    padding: 0.6em 1em;
+    cursor: pointer;
+    max-width: fit-content;
+}
+
+.summaryText {
+    margin-left: 0.4em;
+    font-size: 13px;
+    font-family: var(--font-poppins);
+}
+
+.dropdown {
+    position: absolute;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 0.8em;
+    border-radius: var(--radius);
+    border: 1px solid #E0E0E0;
+    margin-top: 0.9em;
+}
+.dropdownHeading {
+    font-size: 1em;
+    font-weight: 400;
+    font-family: var(--font-poppins);
+    color: var(--gray-2);
+}
+
+.dropdownDetails {
+    color: var(--gray-3);
+    font-size: 0.95em;
+}
+
+.options {
+    margin-top: 0.8em;
+}
+.option {
+    padding: 0.8em;
+    border-radius: var(--radius);
+    transition: var(--transition);
+    cursor: pointer;
+    &:nth-child(2) {
+        margin-top: 0.4em;
+    }
+    &:hover {
+        background: var(--gray-bg);
+    }
+}
+
+.optionHeading {
+    display: flex;
+    align-items: center;
+    font-size: 1em;
+}
+
+.optionHeadingText {
+    font-weight: 500;
+    margin-left: 0.4em;
+    color: var(--gray-2);
+}
+
+.optionDetails {
+    font-size: 0.95em;
+    color: var(--gray-3);
+}
