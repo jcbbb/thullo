@@ -98,11 +98,12 @@
     box-shadow: var(--shadow-subtle);
     list-style-type: none;
     max-width: 100%;
-    top: 3.8em;
+    margin-top: 0.9em;
     right: 1.5em;
     border-radius: var(--radius-small);
     width: 7.5em;
     padding: 0.2em 0;
+    z-index: 1;
 }
 
 .link {
