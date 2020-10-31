@@ -1,0 +1,26 @@
+.profileContainer {
+    width: 36px;
+    height: 36px;
+    background: var(--gray-4);
+    border-radius: var(--radius);
+    overflow: hidden;
+}
+
+.profilePic {
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+}
+
+.initials {
+    color: #fff;
+    display: block;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-family: var(--font-poppins);
+    font-size: 0.9em;
+}
