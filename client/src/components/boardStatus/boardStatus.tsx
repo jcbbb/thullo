@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import Globe from '../icons/globe';
 import Lock from '../icons/lock';
 import styles from './boardStatus.module.scss';
