@@ -1,0 +1,11 @@
+.imageContainer {
+    background: var(--gray-4);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.image {
+    object-fit: cover;
+    max-width: 100%;
+    height: auto;
+}
