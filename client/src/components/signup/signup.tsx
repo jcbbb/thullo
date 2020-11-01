@@ -55,7 +55,7 @@ const Signup = () => {
 
       myForm.submitStep && myForm.submitStep(event);
     },
-    [authCodeState.isError, myForm, createTempUser, verifyAuthCode]
+    [myForm, createTempUser, verifyAuthCode]
   );
 
   return (
