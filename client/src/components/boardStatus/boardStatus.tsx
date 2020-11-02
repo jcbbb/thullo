@@ -12,7 +12,7 @@ const BoardStatus = () => {
       </summary>
       <div className={styles.dropdown}>
         <h4 className={styles.dropdownHeading}>Visibility</h4>
-        <p className={styles.dropdownDetails}>Choose who can this board</p>
+        <p className={styles.dropdownDetails}>Choose who can view this board</p>
         <ul className={styles.options}>
           <li className={styles.option}>
             <div className={styles.optionHeading}>
