@@ -3,7 +3,7 @@ import { Document, model, Schema, Types } from 'mongoose';
 const boardSchema = new Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String },
     cover_photo_url: { type: String },
     private: { type: Boolean, default: false },
     members: { type: Array },
