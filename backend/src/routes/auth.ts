@@ -1,12 +1,13 @@
 import { Router, Response, Request } from 'express';
-import { emailValidationRules, authCodeValidationRules, validate } from '../utils/validator';
-import Auth from '../services/auth';
+import { validationFor, validate } from '../utils/validator';
+import { setCookies } from '../utils';
+import * as Auth from '../services/auth';
 
 const router = Router();
 
 router.post(
   '/check-email',
-  emailValidationRules(),
+  validationFor('email'),
   validate,
   async (req: Request, res: Response) => {
     try {
@@ -19,7 +20,7 @@ router.post(
   },
 );
 
-router.post('/temp-user', emailValidationRules(), validate, async (req: Request, res: Response) => {
+router.post('/temp-user', validationFor('email'), validate, async (req: Request, res: Response) => {
   try {
     const { email } = req.body;
     await Auth.createTempUser(email);
@@ -29,15 +30,55 @@ router.post('/temp-user', emailValidationRules(), validate, async (req: Request,
   }
 });
 
-router.post('/verify', authCodeValidationRules(), validate, async (req: Request, res: Response) => {
-  try {
-    const { email, authCode } = req.body;
-    await Auth.verify(email, authCode);
-    setTimeout(() => {
+router.post(
+  '/verify',
+  validationFor('email', 'authCode'),
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const { email, authCode } = req.body;
+      await Auth.verify(email, authCode);
       res.status(200).json({ message: 'Auth code verified', statusCode: 200 });
-    }, 3000);
-  } catch (err) {
-    res.status(err.statusCode).json({ message: err.message, statusCode: err.statusCode });
-  }
-});
+    } catch (err) {
+      res.status(err.statusCode).json({ ...err });
+    }
+  },
+);
+
+router.post(
+  '/signup',
+  validationFor('email', 'password', 'authCode'),
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const { email, password, name, authCode } = req.body;
+      const { refreshToken, accessToken } = await Auth.signup(email, password, name, authCode);
+
+      setCookies(res, {
+        refreshToken,
+        accessToken,
+      });
+
+      res.status(201).json({ message: 'User created', statusCode: 201 });
+    } catch (err) {
+      res.status(err.statusCode).json({ ...err });
+    }
+  },
+);
+
+router.post(
+  '/login',
+  validationFor('email', 'password'),
+  validate,
+  async (req: Request, res: Response) => {
+    try {
+      const { email, password } = req.body;
+      await Auth.login(email, password);
+      res.status(200).json({ message: 'Logged in', statusCode: 200 });
+    } catch (err) {
+      res.status(err.statusCode).json({ ...err });
+    }
+  },
+);
+
 export default router;
