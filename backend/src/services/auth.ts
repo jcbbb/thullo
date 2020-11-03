@@ -4,97 +4,96 @@ import { BadRequestError } from '../utils/errors';
 import { generateToken, randomNumber } from '../utils';
 import Mail, { IMailOptions } from './mail';
 
-const Auth = (() => {
-  const login = async (email: string, password: string) => {
-    const user = await User.findOne({ email }, { password: 0 });
+export const login = async (email: string, password: string) => {
+  const user = await User.findOne({ email }, { password: 0 });
 
-    if (!user) {
-      throw new BadRequestError('User not found');
-    }
+  if (!user) {
+    throw new BadRequestError('User not found');
+  }
 
-    const isMatch = user.comparePassword(password);
+  const isMatch = user.comparePassword(password);
 
-    if (!isMatch) {
-      throw new BadRequestError('Incorrect password or email');
-    }
+  if (!isMatch) {
+    throw new BadRequestError('Incorrect password or email');
+  }
 
-    const { accessToken, refreshToken } = generateToken(user);
+  const { accessToken, refreshToken } = generateToken(user);
 
-    return { user, accessToken, refreshToken };
-  };
+  return { user, accessToken, refreshToken };
+};
 
-  const signup = async (email: string, password: string, name: string, authCode: string) => {
-    const candidate = await User.findOne({ email });
-    const tempUserCandidate = await TempUser.findOne({ email });
+export const signup = async (email: string, password: string, name: string, authCode: string) => {
+  const candidate = await User.findOne({ email });
+  const tempUserCandidate = await TempUser.findOne({ email });
 
-    if (candidate) {
-      throw new BadRequestError('User already  exists');
-    }
+  if (candidate) {
+    throw new BadRequestError('User already  exists');
+  }
 
-    if (!tempUserCandidate) {
-      throw new BadRequestError(
-        "User with given email was not granted an auth code. Please, don't mess with me!",
-      );
-    }
-    const isValidAuthCode = tempUserCandidate.compareAuthCode(authCode);
-    if (!isValidAuthCode) {
-      throw new BadRequestError("Auth code provided didn't match our records. Don't mess with me!");
-    }
+  if (!tempUserCandidate) {
+    throw new BadRequestError(
+      "User with given email was not granted an auth code. Please, don't mess with me!",
+    );
+  }
+  const isValidAuthCode = tempUserCandidate.compareAuthCode(authCode);
+  if (!isValidAuthCode) {
+    throw new BadRequestError("Auth code provided didn't match our records. Don't mess with me!");
+  }
 
-    const user = new User({ email, password, name });
-    await user.save();
+  const user = new User({ email, password, name });
+  await user.save();
 
-    const { refreshToken, accessToken } = generateToken(user);
+  const { refreshToken, accessToken } = generateToken(user);
 
-    return { user, refreshToken, accessToken };
-  };
+  return { user, refreshToken, accessToken };
+};
 
-  const verify = async (email: string, authCode: string) => {
-    const candidate = await TempUser.findOne({ email });
+export const verify = async (email: string, authCode: string) => {
+  const candidate = await TempUser.findOne({ email });
 
-    if (!candidate) {
-      throw new BadRequestError('User does not exist');
-    }
+  if (!candidate) {
+    throw new BadRequestError('User does not exist');
+  }
 
-    const isMatch = await candidate.compareAuthCode(authCode);
+  const isMatch = await candidate.compareAuthCode(authCode);
 
-    if (!isMatch) {
-      throw new BadRequestError('Auth code does not match');
-    }
+  if (!isMatch) {
+    throw new BadRequestError('Auth code does not match');
+  }
 
-    return isMatch;
-  };
+  return isMatch;
+};
 
-  const check = async (email: string): Promise<void | BadRequestError> => {
-    const existingEmail = await User.findOne({ email });
+export const check = async (email: string): Promise<void | BadRequestError> => {
+  const existingEmail = await User.findOne({ email });
 
-    if (existingEmail) {
-      throw new BadRequestError('Email is already taken');
-    }
-  };
+  if (existingEmail) {
+    throw new BadRequestError('Email is already taken');
+  }
+};
+export const createTempUser = async (email: string) => {
+  const candidate = await TempUser.findOne({ email });
+  const existingUser = await User.findOne({ email });
 
-  const createTempUser = async (email: string) => {
-    const candidate = await TempUser.findOne({ email });
-    const authCode = randomNumber();
+  if (existingUser) {
+    throw new BadRequestError('Email is already taken');
+  }
 
-    if (candidate) {
-      await TempUser.deleteOne({ email });
-    }
+  const authCode = randomNumber();
 
-    const tempUser = new TempUser({ email, authCode });
+  if (candidate) {
+    await TempUser.deleteOne({ email });
+  }
 
-    await tempUser.save();
-    await Mail.send({
-      to: tempUser.email,
-      template: 'auth-code',
-      subject: `Your auth code is ${authCode}`,
-      vars: {
-        authCode,
-      },
-    } as IMailOptions);
-  };
+  const tempUser = new TempUser({ email, authCode });
 
-  return { login, signup, verify, check, createTempUser };
-})();
-
-export default Auth;
+  await tempUser.save();
+  await Mail.send({
+    to: tempUser.email,
+    template: 'auth-code',
+    subject: `Your auth code is ${authCode}`,
+    vars: {
+      authCode,
+    },
+  } as IMailOptions);
+};
