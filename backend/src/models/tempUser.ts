@@ -26,6 +26,8 @@ tempUserSchema.pre('save', function (next) {
     .catch((err) => next(err));
 });
 
+tempUserSchema.index({ email: 1 });
+
 tempUserSchema.methods.compareAuthCode = async function (authCode: string): Promise<boolean> {
   return await bcrypt.compare(authCode, this.authCode);
 };
