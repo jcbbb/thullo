@@ -17,53 +17,51 @@ import { Link } from 'react-router-dom';
 import { Formiz, useForm, FormizStep } from '@formiz/core';
 
 const Signup = () => {
-  const myForm = useForm();
+  const myForm = useForm({ subscribe: true });
 
   const [checkExistingEmail, emailState] = useAsync(api.auth.checkEmail);
   const [createTempUser, tempUserState] = useAsync(api.auth.createTempUser);
   const [verifyAuthCode, authCodeState] = useAsync(api.auth.verifyAuthCode);
+  const [signup, signupState] = useAsync(api.auth.signup);
 
-  const shouldShowProgress = useMemo(() => tempUserState.isLoading || authCodeState.isLoading, [
-    tempUserState.isLoading,
-    authCodeState.isLoading,
-  ]);
+  const shouldShowProgress = useMemo(
+    () => tempUserState.isLoading || authCodeState.isLoading || signupState.isLoading,
+    [tempUserState.isLoading, authCodeState.isLoading, signupState.isLoading]
+  );
 
-  const handleSubmit = useCallback(() => {
-    console.log(myForm.values);
+  const handleSubmit = useCallback(async () => {
+    const { email, password, name, authCode } = myForm.values;
+    await signup(email, password, name, authCode);
   }, [myForm.values]);
 
-  const submitStep = useCallback(
-    async (event: React.FormEvent<HTMLFormElement>) => {
-      event.persist();
-      if (event) event.preventDefault();
+  const handleSubmitStep = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = myForm as any;
+    if (!form.currentStep || !form.currentStep.isValid || !form.currentStep.name) {
+      form.submitStep();
+      return;
+    }
 
-      if (!myForm.currentStep || !(myForm.currentStep as any).isValid) {
-        myForm.submitStep && myForm.submitStep(event);
-        return;
-      }
+    const stepName = form.currentStep.name;
+    if (stepName === 'step_1') {
+      const { email } = form.values;
+      await createTempUser(email);
+    }
 
-      const stepName = (myForm.currentStep as any).name;
-      if (stepName === 'step_1') {
-        await createTempUser(myForm.values?.email);
-        console.log('Created');
-      }
+    if (stepName === 'step_2') {
+      const { email, authCode } = form.values;
+      await verifyAuthCode(email, authCode);
+    }
 
-      if (stepName === 'step_2') {
-        const { email, authCode } = myForm.values;
-        await verifyAuthCode(email, authCode);
-      }
-
-      myForm.submitStep && myForm.submitStep(event);
-    },
-    [myForm, createTempUser, verifyAuthCode]
-  );
+    form.submitStep();
+  };
 
   return (
     <Formiz connect={myForm} onValidSubmit={handleSubmit}>
       <form
         noValidate
         className={cn(styles.form, { [styles.formDisabled]: shouldShowProgress })}
-        onSubmit={submitStep}
+        onSubmit={handleSubmitStep}
       >
         <div className={styles.formContainer}>
           {shouldShowProgress && <Indeterminate />}
@@ -133,6 +131,12 @@ const Signup = () => {
                 placeholder="Your name"
                 required="This field is required"
                 autoComplete="current-name"
+                validations={[
+                  {
+                    rule: isMaxLength(50),
+                    message: 'Your name is ridiculous',
+                  },
+                ]}
               />
             </Spacer>
             <Spacer left="0" right="0" top="0" bottom="1.8em">
