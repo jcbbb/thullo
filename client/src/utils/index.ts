@@ -5,6 +5,7 @@ export const request = async (endpoint: string, { body, ...customConfig }: any =
     method: body ? 'POST' : 'GET',
     body: body ? JSON.stringify(body) : undefined,
     ...customConfig,
+    credentials: 'include',
     headers: {
       ...headers,
       ...customConfig.headers,
