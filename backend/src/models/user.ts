@@ -5,7 +5,7 @@ const userSchema = new Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true },
+    password: { type: String },
     verified: { type: Boolean, default: false },
     profile_photo_url: { type: String },
     gravatar_url: { type: String },
@@ -37,9 +37,12 @@ userSchema.pre('save', function (next) {
     .hash(user.password, 10)
     .then((hash) => {
       user.password = hash;
+      next();
     })
     .catch((err) => next(err));
 });
+
+userSchema.index({ email: 1 });
 
 userSchema.methods.comparePassword = function (candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
