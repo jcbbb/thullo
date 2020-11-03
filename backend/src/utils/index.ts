@@ -30,7 +30,7 @@ export const setCookies = (res: Response, token: Token) => {
     httpOnly: true,
   });
 
-  res.cookie('refresh_token', refreshToken, {
+  return res.cookie('refresh_token', refreshToken, {
     expires: new Date(Date.now() + config.refresh_token_expiration),
     secure: true,
     sameSite: true,
