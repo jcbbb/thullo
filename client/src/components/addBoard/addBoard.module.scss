@@ -1,0 +1,36 @@
+.container {
+    max-width: 300px;
+    width: 17em;
+    padding: 1.5em;
+    background: #fff;
+    border-radius: var(--radius);
+}
+
+.image {
+    width: 100%;
+    height: 6em;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: var(--radius);
+    background: var(--gray-4);
+    overflow: hidden;
+}
+
+.cover {
+    position: relative;
+}
+
+.btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(40%, -40%);
+}
+
+.settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 -0.5rem;
+}
