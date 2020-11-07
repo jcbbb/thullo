@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useCallback, useMemo } from 'react';
 import Spacer from '../spacer';
-import Google from '../icons/google';
-import Github from '../icons/github';
+import GoogleIcon from '../icons/google';
+import GithubIcon from '../icons/github';
 import styles from './signup.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
@@ -32,7 +32,7 @@ const Signup = () => {
   const handleSubmit = useCallback(async () => {
     const { email, password, name, authCode } = myForm.values;
     await signup(email, password, name, authCode);
-  }, [myForm.values]);
+  }, [myForm.values, signup]);
 
   const handleSubmitStep = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -167,16 +167,16 @@ const Signup = () => {
           </Spacer>
           <button className={buttonStyles.authOption}>
             <span style={{ height: 20 }}>
-              <Google />
+              <GoogleIcon />
             </span>
-            <span className={styles.authOptionText}>Signup with Google</span>
+            <span className={styles.authOptionText}>Continue with Google</span>
           </button>
           <Spacer left="0" right="0" bottom="1.8em">
             <button className={buttonStyles.authOption}>
               <span style={{ height: 20 }}>
-                <Github />
+                <GithubIcon />
               </span>
-              <span className={styles.authOptionText}>Signup with Github</span>
+              <span className={styles.authOptionText}>Continue with Github</span>
             </button>
           </Spacer>
           <Link to="/login" className={linkStyles.link}>
