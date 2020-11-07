@@ -17,6 +17,7 @@ const Spacer: FunctionComponent<ISpacer> = ({
   return (
     <div
       style={{
+        width: '100%',
         marginTop: top,
         marginLeft: left,
         marginBottom: bottom,
