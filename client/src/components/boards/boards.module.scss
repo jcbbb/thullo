@@ -1,0 +1,21 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.boards {
+    width: 100%;
+    max-width: 1070px;
+}
+
+.btnText {
+    margin-left: 0.4em;
+}
+
+.heading {
+    color: var(--heading-text);
+    font-size: 1.125em;
+    font-family: var(--font-poppins);
+    font-weight: 400;
+}
