@@ -3,6 +3,7 @@ import Header from './components/header/header';
 import Login from './components/login/login';
 import Signup from './components/signup/signup';
 import Center from './components/center/center';
+import Boards from './components/boards/boards';
 import { Switch, Route } from 'react-router-dom';
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <div className="app">
       <Header />
       <Center>
+        <Boards />
         <Switch>
           <Route path="/signup">
             <Signup />
