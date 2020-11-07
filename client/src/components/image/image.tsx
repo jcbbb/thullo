@@ -12,9 +12,11 @@ type IProps = {
 
 const Image = ({ size = { width: 219, height: 130 }, src, alt, ...rest }: IProps) => {
   return (
-    <div className={styles.imageContainer} style={{ ...size }} {...rest}>
-      <img src={src} alt={alt} />
-    </div>
+    <div
+      className={styles.image}
+      style={{ ...size, backgroundImage: `url(${src})` }}
+      {...rest}
+    ></div>
   );
 };
 
