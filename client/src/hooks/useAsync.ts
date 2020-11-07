@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import useMounted from './useMounted';
 
 export type IState = {
   data?: ResponseData | null;
@@ -7,16 +8,16 @@ export type IState = {
 };
 
 type ResponseData = {
-  [key: string]: string;
+  [key: string]: any;
 };
-
 type ResponseError = {
-  [key: string]: string;
+  [key: string]: any;
 };
 
-export type CallbackFn = (...vars: any) => Promise<Response | undefined>;
+export type CallbackFn = (...vars: any[]) => Promise<Response | undefined>;
+
 export type ReturnType = [
-  (...vars: any) => Promise<void>,
+  (...vars: any[]) => Promise<void>,
   {
     isLoading: boolean;
     isError: boolean;
@@ -27,18 +28,53 @@ export type ReturnType = [
   }
 ];
 
-const useAsync = (cb: CallbackFn): ReturnType => {
-  const initState = {
-    status: 'idle',
-    error: null,
-    data: null,
-  };
+const useSafeDispatch = <T extends Function>(callback: T): T => {
+  const isMounted = useMounted();
 
+  return (useCallback(
+    (...args: any[]) => {
+      if (isMounted) {
+        return callback(...args);
+      }
+    },
+    [callback, isMounted]
+  ) as any) as T;
+};
+
+const initState = {
+  status: 'idle',
+  error: null,
+  data: null,
+};
+
+const useAsync = (cb: CallbackFn): ReturnType => {
   const [state, setState] = useState<IState>(initState);
 
+  const safeSetState = useSafeDispatch(setState);
+
+  const setData = useCallback(
+    (data: ResponseData) => {
+      safeSetState({
+        status: 'resolved',
+        data,
+      });
+    },
+    [safeSetState]
+  );
+
+  const setError = useCallback(
+    (error: ResponseError) => {
+      safeSetState({
+        status: 'rejected',
+        error,
+      });
+    },
+    [safeSetState]
+  );
+
   const run = useCallback(
-    async (...vars: any) => {
-      setState((prevState) => ({ ...prevState, status: 'loading' }));
+    async (...vars: any[]) => {
+      safeSetState({ status: 'loading' });
       try {
         const response = await cb(...vars);
 
@@ -48,22 +84,12 @@ const useAsync = (cb: CallbackFn): ReturnType => {
           throw { ...data }; // eslint-disable-line no-throw-literal
         }
 
-        setState((prevState) => ({
-          ...prevState,
-          status: 'resolved',
-          data,
-          error: null,
-        }));
+        setData(data);
       } catch (err) {
-        setState((prevState) => ({
-          ...prevState,
-          status: 'rejected',
-          error: err,
-          data: null,
-        }));
+        setError(err);
       }
     },
-    [setState, cb]
+    [safeSetState, setData, setError, cb]
   );
 
   return [
