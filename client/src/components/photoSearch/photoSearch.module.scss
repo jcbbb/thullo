@@ -1,0 +1,87 @@
+.photoSearch {
+  position: relative;
+  width: 100%;
+}
+
+.summary {
+  background: var(--gray-bg);
+  color: var(--gray-3);
+  display: flex;
+  align-items: center;
+  padding: 0.6em 1em;
+  cursor: pointer;
+  max-width: 100%;
+  border-radius: var(--radius-small);
+}
+
+.form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  outline: none;
+  border: none;
+  box-shadow: var(--shadow-subtle);
+  padding: 0.9em 3.8em 0.9em 0.9em;
+  border-radius: var(--radius);
+  font-size: 13px;
+  width: 100%;
+}
+
+.formBtn {
+  position: absolute;
+  right: 0;
+  outline: none;
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  padding: 0.625rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 13px;
+  transition: var(--transition);
+  display: inline-flex;
+}
+.summaryText {
+  margin-left: 0.4em;
+  font-size: 13px;
+  font-family: var(--font-poppins);
+}
+
+.dropdown {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  padding: 0.8em;
+  border-radius: var(--radius);
+  border: 1px solid #e0e0e0;
+  margin-top: 0.9em;
+  width: 100%;
+  max-width: 17em;
+  max-height: 21em;
+  overflow-y: auto;
+}
+
+.dropdownHeading {
+  font-size: 1em;
+  font-weight: 400;
+  font-family: var(--font-poppins);
+  color: var(--gray-2);
+}
+
+.dropdownDetails {
+  color: var(--gray-3);
+  font-size: 0.95em;
+}
+
+.images {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.form {
+  max-width: 100%;
+}
