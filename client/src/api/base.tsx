@@ -1,8 +1,10 @@
 import { IAuthEndpoints } from './auth';
 import { kebabCaseToCamel } from '../utils';
+import { IUnsplashEnpoints } from './unsplash';
 
 interface Entities {
   auth: IAuthEndpoints;
+  unsplash: IUnsplashEnpoints;
 }
 
 const API = (entities: Entities) => {
