@@ -61,14 +61,14 @@ const Login = () => {
           <span style={{ height: 20 }}>
             <Google />
           </span>
-          <span className={styles.authOptionText}>Login with Google</span>
+          <span className={styles.authOptionText}>Continue with Google</span>
         </button>
         <Spacer left="0" right="0" bottom="1.8em">
           <button className={buttonStyles.authOption}>
             <span style={{ height: 20 }}>
               <Github />
             </span>
-            <span className={styles.authOptionText}>Login with Github</span>
+            <span className={styles.authOptionText}>Continue with Github</span>
           </button>
         </Spacer>
         <Link to="/signup" className={linkStyles.link}>
