@@ -1,13 +1,10 @@
-.formBtn {
-  background: var(--primary);
+.base {
   padding: 0.625rem;
   outline: none;
   border: none;
   font-family: var(--font-poppins);
   border-radius: var(--radius);
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
+  font-size: 14px;
   cursor: pointer;
   transition: var(--transition);
   display: flex;
@@ -15,15 +12,20 @@
   justify-content: center;
 }
 
-.formBtn:hover:enabled {
-  box-shadow: 0 3px 6px var(--primary-light);
-  background: var(--primary-dark);
-}
-
-.formBtn:disabled {
-  opacity: 0.5;
-  box-shadow: none;
-  cursor: not-allowed;
+.primary {
+  @extend .base;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  &:hover:enabled {
+      box-shadow: 0 3px 6px var(--primary-light);
+      background: var(--primary-dark);
+  }
+  &:disabled {
+      opacity: 0.5;
+      box-shadow: none;
+      cursor: not-allowed;
+  }
 }
 
 .authOption {
@@ -42,14 +44,22 @@
   transition: var(--transition);
   color: var(--heading-text);
   width: 100%;
+  &:hover:enabled {
+      border-color: var(--gray-4);
+  }
+  &:disabled {
+      background: var(--gray-bg);
+      color: var(--gray-4);
+      box-shadow: none;
+      cursor: not-allowed;
+  }
 }
 
-.authOption:hover:enabled {
-  border-color: var(--gray-4);
-}
-.authOption:disabled {
-  background: var(--gray-bg);
-  color: var(--gray-4);
-  box-shadow: none;
-  cursor: not-allowed;
+.secondary {
+    @extend .base;
+    background: transparent;
+    color: var(--heading-text);
+    &:hover:enabled {
+        background: var(--bg);
+    }
 }
