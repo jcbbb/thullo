@@ -28,8 +28,10 @@
   border-radius: var(--radius);
   border: 1px solid #e0e0e0;
   margin-top: 0.9em;
-  margin-right: -300px;
+  max-width: 20em;
+  width: 100vw;
 }
+
 .dropdownHeading {
   font-size: 1em;
   font-weight: 400;
@@ -56,6 +58,9 @@
   }
   &:hover {
     background: var(--gray-bg);
+  }
+  & * {
+    pointer-events: none; 
   }
 }
 
