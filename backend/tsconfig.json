@@ -4,10 +4,15 @@
         "module": "CommonJS",
         "outDir": "./build",
         "rootDir": "./src",
-        "lib": ["ES2020"],
+        "lib": [
+            "ES2020"
+        ],
         "strict": true,
         "esModuleInterop": true,
         "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots": [
+            "./src/types"
+        ]
     }
 }
