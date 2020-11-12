@@ -15,12 +15,11 @@ export interface ITempUser extends Document {
   compareAuthCode: (authCode: string) => Promise<boolean>;
 }
 
-tempUserSchema.pre('save', function (next) {
-  const tempUser = this as ITempUser;
+tempUserSchema.pre<ITempUser>('save', function (next) {
   bcrypt
-    .hash(tempUser.authCode, 10)
+    .hash(this.authCode, 10)
     .then((hash) => {
-      tempUser.authCode = hash;
+      this.authCode = hash;
       next();
     })
     .catch((err) => next(err));

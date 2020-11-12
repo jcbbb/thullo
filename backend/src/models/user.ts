@@ -17,26 +17,25 @@ const userSchema = new Schema(
 
 export interface IUser extends Document {
   _id: Types.ObjectId;
-  name: string;
+  name?: string;
   email: string;
   password: string;
-  verified: boolean;
-  profile_photo_url: string;
-  gravatar_url: string;
-  blocked: boolean;
+  verified?: boolean;
+  profile_photo_url?: string;
+  gravatar_url?: string;
+  blocked?: boolean;
   role: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   comparePassword: (candidatePassword: string) => boolean;
 }
 
-userSchema.pre('save', function (next) {
-  const user = this as IUser;
-  if (!user.isModified('password')) return next();
+userSchema.pre<IUser>('save', function (next) {
+  if (!this.isModified('password')) return next();
   bcrypt
-    .hash(user.password, 10)
+    .hash(this.password, 10)
     .then((hash) => {
-      user.password = hash;
+      this.password = hash;
       next();
     })
     .catch((err) => next(err));
