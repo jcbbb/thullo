@@ -1,4 +1,4 @@
-import {request} from '../utils';
+import { request } from '../utils';
 
 export interface IUnsplashEnpoints {
     search: (query: string, limit: number) => Promise<Response | undefined>;
@@ -22,5 +22,5 @@ export const createUnsplashEndpoints = (resourceUrl: string): IUnsplashEnpoints 
         }),
     };
 
-    return {...endpoints};
+    return { ...endpoints };
 };
