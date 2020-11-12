@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {useState, useCallback, useRef, useMemo} from 'react';
+import { useState, useRef, useMemo } from 'react';
 import useClickOutside from '../../hooks/useClickOutside';
+import useEscape from '../../hooks/useEscape';
 import Globe from '../icons/globe';
 import Lock from '../icons/lock';
 import styles from './boardStatus.module.scss';
@@ -10,13 +11,14 @@ type IProps = {
     setStatus: (status: string) => void;
 }
 
-const BoardStatus = ({status, setStatus}: IProps) => {
+const BoardStatus = ({ status, setStatus }: IProps) => {
     const [open, setOpen] = useState(false);
     const detailsRef = useRef<HTMLDetailsElement>(null!);
 
     const isPrivate = useMemo(() => status === 'Private', [status])
 
     useClickOutside(detailsRef, () => setOpen(false))
+    useEscape(() => setOpen(false))
 
     const handleClose = (ev: React.MouseEvent<HTMLElement>) => {
         ev.preventDefault();
@@ -24,8 +26,9 @@ const BoardStatus = ({status, setStatus}: IProps) => {
     }
 
     const handleKeyDown = (ev: React.KeyboardEvent<HTMLElement>) => {
-        const {value} = (ev.target as HTMLLIElement).dataset;
-        if (ev.keyCode === 13) {
+        const { value } = (ev.target as HTMLLIElement).dataset;
+        const key = ev.key || ev.keyCode;
+        if (key === 'Escape' || key === 'Esc' || key === 13) {
             setStatus(value!)
         }
     }
@@ -36,8 +39,8 @@ const BoardStatus = ({status, setStatus}: IProps) => {
         <details className={styles.boardStatus} open={open} ref={detailsRef}>
             <summary className={styles.summary} onClick={handleClose}>
                 {isPrivate ?
-                    <Lock size={{width: 14, height: 14}} color="var(--gray-3)" />
-                    : <Globe size={{width: 14, height: 14}} color="var(--gray-2)" />
+                    <Lock size={{ width: 14, height: 14 }} color="var(--gray-3)" />
+                    : <Globe size={{ width: 14, height: 14 }} color="var(--gray-2)" />
                 }
                 <span className={styles.summaryText}>{status}</span>
             </summary>
@@ -47,14 +50,14 @@ const BoardStatus = ({status, setStatus}: IProps) => {
                 <ul className={styles.options}>
                     <li className={styles.option} data-value="Public" onKeyDown={handleKeyDown} onClick={handleStatusChange} tabIndex={0}>
                         <div className={styles.optionHeading}>
-                            <Globe size={{width: 14, height: 14}} color="var(--gray-2)" />
+                            <Globe size={{ width: 14, height: 14 }} color="var(--gray-2)" />
                             <span className={styles.optionHeadingText}>Public</span>
                         </div>
                         <p className={styles.optionDetails}>Anyone on the internet can see this.</p>
                     </li>
                     <li onKeyDown={handleKeyDown} className={styles.option} data-value="Private" onClick={handleStatusChange} tabIndex={0}>
                         <div className={styles.optionHeading}>
-                            <Lock size={{width: 14, height: 14}} color="var(--gray-2)" />
+                            <Lock size={{ width: 14, height: 14 }} color="var(--gray-2)" />
                             <span className={styles.optionHeadingText}>Private</span>
                         </div>
                         <p className={styles.optionDetails}>Only board members can see this.</p>
