@@ -5,7 +5,7 @@ import { generateToken, randomNumber } from '../utils';
 import Mail, { IMailOptions } from './mail';
 
 export const login = async (email: string, password: string) => {
-  const user = await User.findOne({ email }, { password: 0 });
+  const user = await User.findOne({ email }, { password: 0, email: 0 });
 
   if (!user) {
     throw new BadRequestError('User not found');
@@ -17,9 +17,9 @@ export const login = async (email: string, password: string) => {
     throw new BadRequestError('Incorrect password or email');
   }
 
-  const { accessToken, refreshToken } = generateToken(user);
+  const accessToken = generateToken(user);
 
-  return { user, accessToken, refreshToken };
+  return { user, accessToken };
 };
 
 export const signup = async (email: string, password: string, name: string, authCode: string) => {
@@ -43,9 +43,9 @@ export const signup = async (email: string, password: string, name: string, auth
   const user = new User({ email, password, name });
   await user.save();
 
-  const { refreshToken, accessToken } = generateToken(user);
+  const accessToken = generateToken(user);
 
-  return { user, refreshToken, accessToken };
+  return { user, accessToken };
 };
 
 export const verify = async (email: string, authCode: string) => {
