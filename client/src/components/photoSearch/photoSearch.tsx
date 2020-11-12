@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState, useEffect, useCallback, useRef} from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from '../image/image';
 import Indeterminate from '../indeterminate/indeterminate';
 import Spacer from '../spacer';
@@ -11,6 +11,7 @@ import useAsync from '../../hooks/useAsync';
 import useMounted from '../../hooks/useMounted';
 import useClickOutside from '../../hooks/useClickOutside'
 import api from '../../api';
+import useEscape from '../../hooks/useEscape';
 
 type IUrl = 'raw' | 'regular' | 'full' | 'thumb' | 'small';
 
@@ -33,16 +34,16 @@ type IProps = {
     setCover: (cover_photo_url: string) => void;
 }
 
-const PhotoSearch = ({setCover}: IProps) => {
+const PhotoSearch = ({ setCover }: IProps) => {
     const [query, setQuery] = useState('');
     const [open, setOpen] = useState(false);
-    const [search, {data, isLoading}] = useAsync(api.unsplash.search);
+    const [search, { data, isLoading }] = useAsync(api.unsplash.search);
     const detailsRef = useRef<HTMLDetailsElement>(null!);
     const isMounted = useMounted();
     const debouncedQuery = useDebounce(query);
 
     const onChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-        const {value} = ev.target;
+        const { value } = ev.target;
         setQuery(value);
     };
 
@@ -57,6 +58,7 @@ const PhotoSearch = ({setCover}: IProps) => {
     );
 
     useClickOutside(detailsRef, () => setOpen(false))
+    useEscape(() => setOpen(false))
 
     useEffect(() => {
         if (isMounted && debouncedQuery) {
@@ -72,7 +74,7 @@ const PhotoSearch = ({setCover}: IProps) => {
     return (
         <details className={styles.photoSearch} ref={detailsRef} open={open}>
             <summary className={styles.summary} onClick={handleClick}>
-                <ImageIcon size={{width: 16, height: 16}} color="var(--gray-3)" />
+                <ImageIcon size={{ width: 16, height: 16 }} color="var(--gray-3)" />
                 <span className={styles.summaryText}>Cover</span>
             </summary>
             <div className={styles.dropdown}>
@@ -89,14 +91,14 @@ const PhotoSearch = ({setCover}: IProps) => {
                             placeholder="Keywords..."
                         />
                         <button className={styles.formBtn} disabled={true}>
-                            <SearchIcon size={{width: 18, height: 18}} />
+                            <SearchIcon size={{ width: 18, height: 18 }} />
                         </button>
                     </form>
                 </Spacer>
                 <div className={styles.images}>
                     {data?.results.map((result: IResult) => (
                         <Spacer top="0.4em" bottom="0.4em" left="0" right="0" width="auto">
-                            <Image size={{width: 50, height: 50}} src={result.urls.thumb} onClick={() => setCover(result.urls.small)} />
+                            <Image size={{ width: 50, height: 50 }} src={result.urls.thumb} onClick={() => setCover(result.urls.small)} />
                         </Spacer>
                     ))}
                 </div>
