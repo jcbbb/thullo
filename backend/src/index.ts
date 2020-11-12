@@ -1,12 +1,14 @@
 import express from 'express';
-import config from './config';
+import config from './config'
 import router from './routes';
 import cors from 'cors';
+import { errorHandler } from './utils/error-handler'
 import { db } from './services/db';
 
 const app = express();
 
 app.use(express.json());
+app.use(errorHandler)
 app.use(
   cors({
     origin: 'http://localhost:3000',
