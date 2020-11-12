@@ -17,7 +17,7 @@ router.post(
     } catch (err) {
       res.status(err.statusCode).json({ message: err.message, statusCode: err.statusCode });
     }
-  },
+  }
 );
 
 router.post('/temp-user', validationFor('email'), validate, async (req: Request, res: Response) => {
@@ -42,7 +42,7 @@ router.post(
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
-  },
+  }
 );
 
 router.post(
@@ -52,18 +52,14 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const { email, password, name, authCode } = req.body;
-      const { refreshToken, accessToken } = await Auth.signup(email, password, name, authCode);
+      const { accessToken } = await Auth.signup(email, password, name, authCode);
 
-      setCookies(res, {
-        refreshToken,
-        accessToken,
-      });
-
+      setCookies(res, accessToken)
       res.status(201).json({ message: 'User created', statusCode: 201 });
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
-  },
+  }
 );
 
 router.post(
@@ -78,7 +74,7 @@ router.post(
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
-  },
+  }
 );
 
 export default router;
