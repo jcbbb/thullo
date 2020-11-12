@@ -1,46 +1,60 @@
-class DomainError extends Error {
+export type IError = {
+  message?: string;
   statusCode?: number;
+  errors?: any;
+}
 
-  constructor(message: string, statusCode?: number) {
+class DomainError extends Error implements IError {
+  statusCode?: number;
+  errors?: any;
+
+  constructor(message?: string, statusCode?: number, errors?: any) {
     super(message);
     this.name = this.constructor.name;
     this.statusCode = statusCode;
+    this.errors = errors;
     Error.captureStackTrace(this, this.constructor);
   }
 }
 
 export class BadRequestError extends DomainError {
-  constructor(message: string, statusCode: number = 400) {
+  constructor(message = 'Bad request', statusCode = 400) {
     super(message, statusCode);
   }
 }
 
 export class InternalError extends DomainError {
-  constructor(message: string, statusCode: number = 500) {
+  constructor(message = 'Internal server error', statusCode = 500) {
     super(message, statusCode);
   }
 }
 
 export class AuthorizationError extends DomainError {
-  constructor(message: string, statusCode: number = 403) {
+  constructor(message = 'Unauthorized', statusCode = 403) {
     super(message, statusCode);
   }
 }
 
 export class AuthenticationError extends DomainError {
-  constructor(message: string, statusCode: number = 401) {
+  constructor(message = 'Authentication failed', statusCode = 401) {
     super(message, statusCode);
   }
 }
 
 export class ResourceNotFoundError extends DomainError {
-  constructor(message: string, statusCode: number = 404) {
+  constructor(message = 'Resource not found', statusCode = 404) {
     super(message, statusCode);
   }
 }
 
 export class MailError extends DomainError {
-  constructor(message: string, statusCode: number = 502) {
+  constructor(message = 'Something went wrong with Mail service', statusCode = 502) {
     super(message, statusCode);
+  }
+}
+
+export class ValidationError extends DomainError {
+  constructor(message = 'Validation failed', statusCode = 422, errors: any) {
+    super(message, statusCode, errors)
   }
 }
