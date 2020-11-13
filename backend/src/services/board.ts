@@ -10,9 +10,8 @@ type ICreate = {
 }
 
 export const create = async ({ title, creator, visibility = 'Public', cover_photo_url }: ICreate) => {
-    const isPublic: boolean = visibility === 'public';
+    const isPublic: boolean = visibility === 'Public';
     const isPrivate: boolean = !isPublic;
-
     if (!title) {
         throw new BadRequestError('Title is required')
     }
