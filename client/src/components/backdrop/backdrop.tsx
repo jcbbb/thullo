@@ -10,7 +10,7 @@ type IProps = {
 
 const Backdrop: React.FC<IProps> = ({ children, isActive, close }) => {
     const onClose = React.useCallback((ev) => {
-        if (ev.target == ev.currentTarget) close()
+        if (ev.target === ev.currentTarget) close()
     }, [close])
 
     const backdrop = (
