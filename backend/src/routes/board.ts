@@ -12,7 +12,7 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
         await Board.create({ title, visibility: status, cover_photo_url, creator: _id })
         res.status(201).json({ message: 'Board created', statusCode: 201 })
     } catch (err) {
-        res.status(err.statusCode).json({ message: err.message, statusCode: err.statusCode });
+        res.status(err.statusCode).json({ ...err });
     }
 })
 
