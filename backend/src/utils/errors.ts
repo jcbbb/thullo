@@ -9,8 +9,9 @@ class DomainError extends Error implements IError {
   errors?: any;
 
   constructor(message?: string, statusCode?: number, errors?: any) {
-    super(message);
+    super();
     this.name = this.constructor.name;
+    this.message = message!;
     this.statusCode = statusCode;
     this.errors = errors;
     Error.captureStackTrace(this, this.constructor);
