@@ -33,17 +33,17 @@ export const randomNumber = () => Math.floor(100000 + Math.random() * 900000);
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
   const accessToken = req.cookies.access_token || '';
   if (!accessToken) {
-    throw new BadRequestError('Access token is required')
+    return next(new BadRequestError('Access token is required'))
   }
 
   jwt.verify(accessToken, (err, decoded) => {
     if (!err) {
       redisClient.get((decoded as any)._id, (err, reply) => {
         if (err) {
-          throw new Error('Something went wrong with redis')
+          return next(new Error('Something went wrong with redis'))
         }
         if (reply) {
-          throw new AuthenticationError('This user has been blocked by admin')
+          return next(new AuthenticationError('This user has been blocked by admin'))
         }
       })
       req.user = decoded as any;
