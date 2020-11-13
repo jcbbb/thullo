@@ -28,7 +28,7 @@ const BoardStatus = ({ status, setStatus }: IProps) => {
     const handleKeyDown = (ev: React.KeyboardEvent<HTMLElement>) => {
         const { value } = (ev.target as HTMLLIElement).dataset;
         const key = ev.key || ev.keyCode;
-        if (key === 'Escape' || key === 'Esc' || key === 13) {
+        if (key === 'Enter' || key === 13) {
             setStatus(value!)
         }
     }
