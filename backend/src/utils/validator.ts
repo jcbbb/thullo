@@ -1,5 +1,6 @@
 import { body, validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
+import { ValidationError } from './errors';
 
 type ErrorParam = string | number;
 type ErrorMessage = string;
@@ -19,14 +20,17 @@ const emailValidationRules = () => [
 const authCodeValidationRules = () => [
   body('authCode')
     .notEmpty()
+    .withMessage('Auth code cannot be empty')
     .isString()
+    .withMessage('Auth code must string')
     .isLength({ min: 6, max: 6 })
-    .withMessage('Auth code must be 6 characters long and not empty'),
+    .withMessage('Auth code must be 6 characters long'),
 ];
 
 const passwordValidationRules = () => [
   body('password')
     .notEmpty()
+    .withMessage('Password cannot be empty')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
 ];
@@ -55,8 +59,5 @@ export const validate = (req: Request, res: Response, next: NextFunction) => {
 
   errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
 
-  return res.status(422).json({
-    message: 'Validation failed',
-    errors: extractedErrors,
-  });
+  return next(new ValidationError('Validation Failed', 422, extractedErrors))
 };
