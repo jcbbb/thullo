@@ -14,7 +14,7 @@ const Boards = () => {
     return (
         <>
             <Backdrop isActive={isActive} close={toggle}>
-                <AddBoard />
+                <AddBoard toggle={toggle} />
             </Backdrop>
             <div className={styles.boards}>
                 <div className={styles.header}>
