@@ -14,7 +14,7 @@ export const createBoardEndoints = (resourceUrl: string): IBoardEndpoints => {
     const endpoints: IBoardEndpoints = {
         create: async (values) =>
             await request(resourceUrl, {
-                body: values
+                body: values,
             })
     };
 
