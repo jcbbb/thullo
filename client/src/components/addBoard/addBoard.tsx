@@ -18,7 +18,11 @@ const initialFormValues = {
     status: 'Public'
 }
 
-const AddBoard = () => {
+type IProps = {
+    toggle: () => void;
+}
+
+const AddBoard = ({ toggle }: IProps) => {
     const isMounted = useMounted()
     const [getRandom, { data }, reset] = useAsync(api.unsplash.getRandom);
     const [createBoard, submitState] = useAsync(api.board.create)
@@ -84,9 +88,9 @@ const AddBoard = () => {
                 </div>
                 <div className={styles.actions}>
                     <Spacer top="0" bottom="0" right="0.8em" width="auto">
-                        <button className={buttonStyles.secondary}>Cancel</button>
+                        <button className={buttonStyles.secondary} onClick={toggle}>Cancel</button>
                     </Spacer>
-                    <button className={buttonStyles.primary} onClick={onSubmit} disabled={submitState?.isLoading} >
+                    <button className={buttonStyles.primary} onClick={onSubmit} disabled={!formValues.title || submitState?.isLoading} >
                         <PlusIcon size={{ width: 18, height: 18 }} />
                         <span className={styles.btnText}>Create</span>
                     </button>
