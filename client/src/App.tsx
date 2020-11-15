@@ -16,7 +16,7 @@ function App() {
                 <Center>
                     <Boards />
                     <Routes>
-                        <Route path="/signup">
+                        <Route path="/">
                             <Signup />
                         </Route>
                         <Route path="/login">
