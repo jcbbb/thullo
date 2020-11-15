@@ -1,5 +1,4 @@
 import { Router, Response, Request } from 'express';
-import { validationFor, validate } from '../utils/validator';
 import { verifyToken } from '../utils'
 import * as Board from '../services/board';
 
