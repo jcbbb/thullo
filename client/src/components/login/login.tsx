@@ -1,81 +1,83 @@
-import React, {useState, ChangeEvent} from 'react';
+import React, { useCallback } from 'react';
 import Spacer from '../spacer';
-import Google from '../icons/google';
-import Github from '../icons/github';
+import FormInput from '../formInput/formInput';
+import GoogleIcon from '../icons/google';
+import GithubIcon from '../icons/github';
+import useAsync from '../../hooks/useAsync'
 import styles from './login.module.scss';
-import inputStyles from '../../styles/input.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
-import {Link} from 'react-router-dom';
-
-interface IForm {
-    email?: string;
-    password?: string;
-}
+import { Link } from 'react-router-dom';
+import { Formiz, useForm } from '@formiz/core';
+import { isEmail, isMinLength } from '@formiz/validations';
 
 const Login = () => {
-    const [values, setValues] = useState<IForm>({});
+    const form = useForm({ subscribe: true });
 
-    const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = ev.target;
-        setValues((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
+    const handleSubmit = useCallback((ev) => {
+        ev.preventDefault()
+        console.log(form.values)
+    }, [form.values])
 
     return (
-        <form className={styles.form}>
-            <div className={styles.formContainer}>
-                <h3 className={styles.formHeading}>Login</h3>
-                <Spacer left="0" right="0" top="1.8em">
-                    <input
-                        className={inputStyles.formInput}
-                        name="email"
-                        type="email"
-                        placeholder="Email"
-                        value={values.email || ''}
-                        onChange={(ev) => {
-                            handleChange(ev);
-                        }}
-                    />
-                </Spacer>
-                <Spacer left="0" right="0" top="0" bottom="1.8em">
-                    <input
-                        className={inputStyles.formInput}
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        value={values.password || ''}
-                        onChange={(ev) => {
-                            handleChange(ev);
-                        }}
-                    />
-                </Spacer>
-                <button className={buttonStyles.primary}>Login</button>
-                <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
-                    <span className={styles.seperator}>or</span>
-                </Spacer>
+        <Formiz connect={form} onValidSubmit={handleSubmit}>
+            <form className={styles.form} noValidate onSubmit={handleSubmit}>
+                <div className={styles.formContainer}>
+                    <h3 className={styles.formHeading}>Login</h3>
+                    <Spacer left="0" right="0" top="1.8em">
+                        <FormInput
+                            name="email"
+                            type="email"
+                            placeholder="Email"
+                            required="Email is required"
+                            autoComplete="current-email"
+                            validations={[{
+                                rule: isEmail(),
+                                message: 'Provide a valid email'
+                            }]}
+                        />
 
-                <button className={buttonStyles.authOption}>
-                    <span style={{height: 20}}>
-                        <Google />
-                    </span>
-                    <span className={styles.authOptionText}>Continue with Google</span>
-                </button>
-                <Spacer left="0" right="0" bottom="1.8em">
+                    </Spacer>
+                    <Spacer left="0" right="0" top="0" bottom="1.8em">
+                        <FormInput
+                            name="password"
+                            type="password"
+                            placeholder="Password"
+                            required="Password is required"
+                            autoComplete="current-password"
+                            validations={[
+                                {
+                                    rule: isMinLength(6),
+                                    message: 'Password should be at least 6 characters',
+                                },
+                            ]}
+                        />
+                    </Spacer>
+                    <button className={buttonStyles.primary} disabled={!form.isStepValid}>Login</button>
+                    <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
+                        <span className={styles.seperator}>or</span>
+                    </Spacer>
+
                     <button className={buttonStyles.authOption}>
-                        <span style={{height: 20}}>
-                            <Github />
+                        <span style={{ height: 20 }}>
+                            <GoogleIcon />
                         </span>
-                        <span className={styles.authOptionText}>Continue with Github</span>
+                        <span className={styles.authOptionText}>Continue with Google</span>
                     </button>
-                </Spacer>
-                <Link to="/signup" className={linkStyles.link}>
-                    Don't have an account?
+                    <Spacer left="0" right="0" bottom="1.8em">
+                        <button className={buttonStyles.authOption}>
+                            <span style={{ height: 20 }}>
+                                <GithubIcon />
+                            </span>
+                            <span className={styles.authOptionText}>Continue with Github</span>
+                        </button>
+                    </Spacer>
+                    <Link to="/" className={linkStyles.link}>
+                        Don't have an account?
         </Link>
-            </div>
-        </form>
+                </div>
+            </form>
+        </Formiz>
     );
 };
 
