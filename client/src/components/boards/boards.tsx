@@ -8,8 +8,8 @@ import buttonStyles from '../../styles/button.module.scss';
 import useEscape from '../../hooks/useEscape';
 
 const Boards = () => {
-    const { isActive, toggle } = useBackdrop()
-    useEscape(toggle)
+    const { isActive, toggle, dismiss } = useBackdrop()
+    useEscape(dismiss)
 
     return (
         <>
