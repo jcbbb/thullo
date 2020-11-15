@@ -1,4 +1,4 @@
-import {useState, useCallback} from 'react';
+import { useState, useCallback } from 'react';
 import useMounted from './useMounted';
 
 export type IState = {
@@ -75,14 +75,14 @@ const useAsync = (cb: CallbackFn): ReturnType => {
 
     const run = useCallback(
         async (...vars: any[]) => {
-            safeSetState({status: 'loading'});
+            safeSetState({ status: 'loading' });
             try {
                 const response = await cb(...vars);
 
                 const data = await response?.json();
                 if (!response?.ok) {
                     // If response is not ok, throw data as it contains message about the error;
-                    throw {...data}; // eslint-disable-line no-throw-literal
+                    throw { ...data }; // eslint-disable-line no-throw-literal
                 }
 
                 setData(data);
