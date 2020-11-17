@@ -6,7 +6,7 @@ const useClickOutside = (elRef: React.RefObject<any>, callback: Function): void 
 
     useEffect(() => {
         const handler = (ev: MouseEvent) => {
-            if (!elRef?.current.contains(ev.target)) {
+            if (!elRef?.current?.contains(ev.target)) {
                 callbackRef.current(ev)
             }
         }
