@@ -1,7 +1,6 @@
 type IAuthReducer =
-    | {type: 'LOGIN'}
-    | {type: 'LOGOUT'}
-    | {type: never}
+    | { type: 'LOGIN' }
+    | { type: 'LOGOUT' }
 
 
 const authReducer = <T>(state: T, action: IAuthReducer) => {
@@ -17,7 +16,7 @@ const authReducer = <T>(state: T, action: IAuthReducer) => {
                 isAuthenticated: false
             }
         default:
-            throw new Error(`Unsupported action type ${action.type}`)
+            throw new Error(`Unsupported action type`)
     }
 }
 
