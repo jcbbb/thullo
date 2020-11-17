@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 import { validationFor, validate } from '../utils/validator';
-import { setCookies } from '../utils';
+import { setCookies, verifyToken } from '../utils';
 import * as Auth from '../services/auth';
 
 const router = Router();
@@ -69,12 +69,17 @@ router.post(
   async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
-      await Auth.login(email, password);
+      const { accessToken } = await Auth.login(email, password);
+      setCookies(res, accessToken)
       res.status(200).json({ message: 'Logged in', statusCode: 200 });
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
   }
 );
+
+router.get('/me', verifyToken, async (req: Request, res: Response) => {
+  res.json({ message: 'Access token verified', statusCode: 200 });
+})
 
 export default router;
