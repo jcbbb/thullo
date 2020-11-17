@@ -1,6 +1,7 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Spacer from '../spacer';
 import FormInput from '../formInput/formInput';
+import Indeterminate from '../indeterminate/indeterminate';
 import GoogleIcon from '../icons/google';
 import GithubIcon from '../icons/github';
 import useAsync from '../../hooks/useAsync'
@@ -10,18 +11,29 @@ import linkStyles from '../../styles/link.module.scss';
 import { Link } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail, isMinLength } from '@formiz/validations';
+import { useAuthDispatch } from '../../context/authContext'
+import api from '../../api'
 
 const Login = () => {
     const form = useForm({ subscribe: true });
+    const authDispatch = useAuthDispatch()
+    const [login, loginState] = useAsync(api.auth.login)
 
     const handleSubmit = useCallback((ev) => {
         ev.preventDefault()
-        console.log(form.values)
-    }, [form.values])
+        login(form.values)
+    }, [form.values, login])
+
+    useEffect(() => {
+        if (loginState.isSuccess) {
+            authDispatch({ type: 'LOGIN' })
+        }
+    }, [loginState.isSuccess])
 
     return (
         <Formiz connect={form} onValidSubmit={handleSubmit}>
             <form className={styles.form} noValidate onSubmit={handleSubmit}>
+                {loginState.isLoading && <Indeterminate />}
                 <div className={styles.formContainer}>
                     <h3 className={styles.formHeading}>Login</h3>
                     <Spacer left="0" right="0" top="1.8em">
@@ -36,7 +48,6 @@ const Login = () => {
                                 message: 'Provide a valid email'
                             }]}
                         />
-
                     </Spacer>
                     <Spacer left="0" right="0" top="0" bottom="1.8em">
                         <FormInput
@@ -57,7 +68,6 @@ const Login = () => {
                     <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
                         <span className={styles.seperator}>or</span>
                     </Spacer>
-
                     <button className={buttonStyles.authOption}>
                         <span style={{ height: 20 }}>
                             <GoogleIcon />
