@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
-import { BadRequestError } from "../utils/errors"
-import Board from '../models/board';
+import { BadRequestError, ResourceNotFoundError } from "../utils/errors"
+import Board, { IBoard } from '../models/board';
 
 type ICreate = {
     title: string;
@@ -23,4 +23,21 @@ export const create = async ({ title, creator, visibility = 'Public', cover_phot
     await board.save();
 }
 
+export const getAllUserBoards = async (creatorId: Types.ObjectId): Promise<IBoard[]> => {
+    if (!creatorId) {
+        throw new BadRequestError(`Creator id is required for getting boards for that user`)
+    }
+    return await Board.find({ creator: creatorId }).populate('creator');
+}
 
+export const getSingle = async (boardId: string): Promise<IBoard> => {
+    if (!boardId) {
+        throw new BadRequestError('Board id is required');
+    }
+    const board = await Board.findById(boardId).populate('creator');
+    if (!board) {
+        throw new ResourceNotFoundError(`Board with id of ${boardId} is not found`);
+    }
+
+    return board;
+}
