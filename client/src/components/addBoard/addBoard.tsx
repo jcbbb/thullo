@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import BoardStatus from '../boardStatus/boardStatus'
 import PhotoSearch from '../photoSearch/photoSearch'
 import Spacer from '../spacer'
+import Indeterminate from '../indeterminate/indeterminate';
 import useAsync from '../../hooks/useAsync';
 import useMounted from '../../hooks/useMounted';
 import CloseIcon from '../icons/close'
@@ -11,6 +12,7 @@ import api from '../../api';
 import cn from 'classnames';
 import styles from './addBoard.module.scss'
 import buttonStyles from '../../styles/button.module.scss'
+import inputStyles from '../../styles/input.module.scss'
 
 const initialFormValues = {
     cover_photo_url: '',
@@ -24,16 +26,9 @@ type IProps = {
 
 const AddBoard = ({ toggle }: IProps) => {
     const isMounted = useMounted()
+    const [formValues, setFormValues] = useState(initialFormValues)
     const [getRandom, { data }, reset] = useAsync(api.unsplash.getRandom);
     const [createBoard, submitState] = useAsync(api.board.create)
-
-    useEffect(() => {
-        if (isMounted) {
-            getRandom()
-        }
-    }, [getRandom, isMounted])
-
-    const [formValues, setFormValues] = useState(initialFormValues)
 
     const handleStatus = useCallback((status: string) => {
         setFormValues((prevState) => ({
@@ -64,11 +59,34 @@ const AddBoard = ({ toggle }: IProps) => {
         createBoard(formValues)
     }, [formValues, createBoard])
 
+    useEffect(() => {
+        if (isMounted) {
+            getRandom()
+        }
+    }, [getRandom, isMounted])
+
+    useEffect(() => {
+        if (data?.urls.small) {
+            setFormValues((prevState) => ({
+                ...prevState,
+                cover_photo_url: data.urls.small
+            }))
+        }
+    }, [data, setFormValues])
+
+    useEffect(() => {
+        if (submitState.isSuccess) {
+            toggle();
+            clear();
+        }
+    }, [submitState.isSuccess, clear, toggle])
+
     return (
         <div className={styles.container}>
+            {submitState.isLoading && <Indeterminate />}
             <div className={styles.cover}>
-                <div style={formValues.cover_photo_url || data ? { backgroundImage: `url(${formValues.cover_photo_url || data?.urls.small})` } : void 0} className={styles.image}></div>
-                {(formValues.cover_photo_url || data) && (
+                <div style={formValues.cover_photo_url ? { backgroundImage: `url(${formValues.cover_photo_url})` } : void 0} className={styles.image}></div>
+                {formValues.cover_photo_url && (
                     <button className={cn(buttonStyles.primary, styles.btn)} onClick={clear}>
                         <CloseIcon size={{ width: 18, height: 18 }} />
                     </button>
@@ -77,6 +95,7 @@ const AddBoard = ({ toggle }: IProps) => {
                     <form className={styles.form} onSubmit={onSubmit}>
                         <input name="title" className={styles.input} value={formValues.title} onChange={handleInput} type="text" placeholder="Add board title" />
                     </form>
+                    {submitState.isError && <span className={inputStyles.errorText}>{submitState.error}</span>}
                 </Spacer>
                 <div className={styles.settings}>
                     <Spacer left="0.5rem" right="0.5rem" top="1.2rem" bottom="1.2rem">
