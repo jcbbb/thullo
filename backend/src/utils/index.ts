@@ -36,17 +36,18 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     return next(new BadRequestError('Access token is required'))
   }
 
-  jwt.verify(accessToken, (err, decoded) => {
+  jwt.verify(accessToken, config.access_token_secret, (err: any, decoded: any) => {
     if (!err) {
-      redisClient.get((decoded as any)._id, (err, reply) => {
+      redisClient.get(decoded._id, (err, reply) => {
         if (err) {
           return next(new Error('Something went wrong with redis'))
         }
         if (reply) {
           return next(new AuthenticationError('This user has been blocked by admin'))
         }
-      })
-      req.user = decoded as any;
+      });
+
+      req.user = decoded;
       next()
     }
   })
