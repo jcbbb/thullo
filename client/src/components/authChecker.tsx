@@ -22,7 +22,7 @@ const AuthChecker: React.FC = ({ children }) => {
         if (checkAuthState.isError) {
             authDispatch({ type: 'LOGOUT' })
         }
-    }, [checkAuthState.isError])
+    }, [checkAuthState.isError, authDispatch])
 
     return <>{children}</>
 }

@@ -28,7 +28,7 @@ const Login = () => {
         if (loginState.isSuccess) {
             authDispatch({ type: 'LOGIN' })
         }
-    }, [loginState.isSuccess])
+    }, [loginState.isSuccess, authDispatch])
 
     return (
         <Formiz connect={form} onValidSubmit={handleSubmit}>
