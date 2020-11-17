@@ -31,7 +31,10 @@ export const setCookies = (res: Response, accessToken: AccessToken) => {
 export const randomNumber = () => Math.floor(100000 + Math.random() * 900000);
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-  const accessToken = req.cookies.access_token || '';
+  const authHeader = req.get('Authorization')?.split(" ");
+  const fromHeader = authHeader && authHeader[0] === 'Bearer' ? authHeader[1] : '';
+  const accessToken = req.cookies.access_token || fromHeader || '';
+
   if (!accessToken) {
     return next(new BadRequestError('Access token is required'))
   }
