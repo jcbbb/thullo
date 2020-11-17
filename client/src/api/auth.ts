@@ -1,10 +1,24 @@
-import {request} from '../utils';
+import { request } from '../utils';
+
+type ISignup = {
+    email: string;
+    password: string;
+    name: string;
+    authCode: string;
+}
+
+type ILogin = {
+    email: string;
+    password: string;
+}
 
 export interface IAuthEndpoints {
     checkEmail: (email: string) => Promise<Response | undefined>;
     createTempUser: (email: string) => Promise<Response | undefined>;
     verifyAuthCode: (email: string, authCode: string) => Promise<Response | undefined>;
-    signup: (email: string, password: string, name: string, authCode: string) => Promise<Response | undefined>
+    signup: (sigupCreds: ISignup) => Promise<Response | undefined>
+    login: (loginCreds: ILogin) => Promise<Response | undefined>
+    checkAuth: () => Promise<Response | undefined>
 }
 
 export const createAuthEndoints = (resourceUrl: string): IAuthEndpoints => {
@@ -28,16 +42,15 @@ export const createAuthEndoints = (resourceUrl: string): IAuthEndpoints => {
                     authCode,
                 },
             }),
-        signup: async (email: string, password: string, name: string, authCode: string) =>
+        signup: async (signupCreds) =>
             await request(`${resourceUrl}/signup`, {
-                body: {
-                    email,
-                    authCode,
-                    password,
-                    name
-                }
-            })
+                body: signupCreds
+            }),
+        login: async (loginCreds) => await request(`${resourceUrl}/login`, {
+            body: loginCreds
+        }),
+        checkAuth: async () => await request(`${resourceUrl}/me`)
     };
 
-    return {...endpoints};
+    return { ...endpoints };
 };
