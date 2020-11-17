@@ -9,7 +9,7 @@ const FormInput = React.forwardRef((props: any, ref: any) => {
 
   const showError = !isValid && (!isPristine || isSubmitted);
   return (
-    <>
+    <React.Fragment>
       <input
         className={cn(inputStyles.formInput, { [inputStyles.errorInput]: showError })}
         name={name}
@@ -22,7 +22,7 @@ const FormInput = React.forwardRef((props: any, ref: any) => {
         ref={ref}
       />
       {showError && <span className={inputStyles.errorText}>{errorMessage}</span>}
-    </>
+    </React.Fragment>
   );
 });
 
