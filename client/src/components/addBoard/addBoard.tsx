@@ -95,7 +95,7 @@ const AddBoard = ({ toggle }: IProps) => {
                     <form className={styles.form} onSubmit={onSubmit}>
                         <input name="title" className={styles.input} value={formValues.title} onChange={handleInput} type="text" placeholder="Add board title" />
                     </form>
-                    {submitState.isError && <span className={inputStyles.errorText}>{submitState.error}</span>}
+                    {submitState.isError && <span className={inputStyles.errorText}>{submitState.error?.message}</span>}
                 </Spacer>
                 <div className={styles.settings}>
                     <Spacer left="0.5rem" right="0.5rem" top="1.2rem" bottom="1.2rem">
