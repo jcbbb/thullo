@@ -9,7 +9,7 @@ const boardSchema = new Schema(
     members: { type: Array },
     admins: { type: Array },
     lists: { type: Array },
-    creator: { type: Types.ObjectId, required: true },
+    creator: { type: Types.ObjectId, required: true, ref: 'User' },
   },
   { timestamps: true },
 );
@@ -25,6 +25,8 @@ export interface IBoard extends Document {
   cretedAt: Date;
   updatedAt: Date;
 }
+
+boardSchema.index({ creator: 1 });
 
 const Board = model<IBoard>('boards', boardSchema);
 
