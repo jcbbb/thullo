@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback, useMemo} from 'react';
+import { useCallback, useMemo } from 'react';
 import Spacer from '../spacer';
 import GoogleIcon from '../icons/google';
 import GithubIcon from '../icons/github';
@@ -12,12 +12,12 @@ import Indeterminate from '../indeterminate/indeterminate';
 import api from '../../api';
 import cn from 'classnames';
 import useAsync from '../../hooks/useAsync';
-import {isEmail, isNumber, isMinLength, isMaxLength} from '@formiz/validations';
-import {Link} from 'react-router-dom';
-import {Formiz, useForm, FormizStep} from '@formiz/core';
+import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
+import { Link } from 'react-router-dom';
+import { Formiz, useForm, FormizStep } from '@formiz/core';
 
 const Signup = () => {
-    const myForm = useForm({subscribe: true});
+    const myForm = useForm({ subscribe: true });
 
     const [checkExistingEmail, emailState] = useAsync(api.auth.checkEmail);
     const [createTempUser, tempUserState] = useAsync(api.auth.createTempUser);
@@ -30,8 +30,7 @@ const Signup = () => {
     );
 
     const handleSubmit = useCallback(async () => {
-        const {email, password, name, authCode} = myForm.values;
-        await signup(email, password, name, authCode);
+        await signup(myForm.values)
     }, [myForm.values, signup]);
 
     const handleSubmitStep = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -44,12 +43,12 @@ const Signup = () => {
 
         const stepName = form.currentStep.name;
         if (stepName === 'step_1') {
-            const {email} = form.values;
+            const { email } = form.values;
             await createTempUser(email);
         }
 
         if (stepName === 'step_2') {
-            const {email, authCode} = form.values;
+            const { email, authCode } = form.values;
             await verifyAuthCode(email, authCode);
         }
 
@@ -60,7 +59,7 @@ const Signup = () => {
         <Formiz connect={myForm} onValidSubmit={handleSubmit}>
             <form
                 noValidate
-                className={cn(styles.form, {[styles.formDisabled]: shouldShowProgress})}
+                className={cn(styles.form, { [styles.formDisabled]: shouldShowProgress })}
                 onSubmit={handleSubmitStep}
             >
                 <div className={styles.formContainer}>
@@ -68,7 +67,7 @@ const Signup = () => {
                     <h3 className={styles.formHeading}>Signup</h3>
                     {!myForm.isFirstStep && (
                         <button className={styles.backBtn} onClick={myForm.prevStep} type="button">
-                            <ArrowLeft size={{width: 20, height: 20}} color="var(--primary)" />
+                            <ArrowLeft size={{ width: 20, height: 20 }} color="var(--primary)" />
                         </button>
                     )}
                     <FormizStep name="step_1">
@@ -166,14 +165,14 @@ const Signup = () => {
                         <span className={styles.seperator}>or</span>
                     </Spacer>
                     <button className={buttonStyles.authOption}>
-                        <span style={{height: 20}}>
+                        <span style={{ height: 20 }}>
                             <GoogleIcon />
                         </span>
                         <span className={styles.authOptionText}>Continue with Google</span>
                     </button>
                     <Spacer left="0" right="0" bottom="1.8em">
                         <button className={buttonStyles.authOption}>
-                            <span style={{height: 20}}>
+                            <span style={{ height: 20 }}>
                                 <GithubIcon />
                             </span>
                             <span className={styles.authOptionText}>Continue with Github</span>
