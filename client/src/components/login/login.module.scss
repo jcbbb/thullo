@@ -3,6 +3,8 @@
     box-shadow: var(--shadow-subtle);
     width: 24em;
     border-radius: var(--radius);
+    position: relative;
+    overflow: hidden;
 }
 
 .formContainer {
