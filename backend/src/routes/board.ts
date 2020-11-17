@@ -15,4 +15,24 @@ router.post('/', verifyToken, async (req: Request, res: Response) => {
     }
 })
 
+router.get('/', verifyToken, async (req: Request, res: Response) => {
+    try {
+        const { _id } = req.user;
+        const boards = await Board.getAllUserBoards(_id);
+        res.status(200).json({ boards })
+    } catch (err) {
+        res.status(err.statusCode).json({ ...err })
+    }
+})
+
+router.get('/:boardId', verifyToken, async (req: Request, res: Response) => {
+    try {
+        const { boardId } = req.params;
+        const board = await Board.getSingle(boardId);
+        res.status(200).json({ board })
+    } catch (err) {
+        res.status(err.statusCode).json({ ...err })
+    }
+})
+
 export default router;
