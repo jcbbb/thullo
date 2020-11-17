@@ -1,0 +1,53 @@
+.profile {
+  display: flex;
+  align-items: center;
+}
+.profilePic {
+  width: 36px;
+  height: 36px;
+  background: var(--gray-3);
+  border-radius: var(--radius);
+}
+
+.details {
+  position: relative;
+}
+.summary {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+  list-style-type: none;
+  color: var(--heading-text);
+  display: flex;
+  align-items: center;
+}
+
+.summaryText {
+  margin: 0 0.6em;
+}
+
+.links {
+  position: absolute;
+  background: #fff;
+  box-shadow: var(--shadow-subtle);
+  list-style-type: none;
+  max-width: 100%;
+  margin-top: 0.9em;
+  right: 1.5em;
+  border-radius: var(--radius-small);
+  width: 7.5em;
+  padding: 0.2em 0;
+  z-index: 1;
+}
+
+.link {
+  display: block;
+  text-decoration: none;
+  padding: 0.4em 1.5em;
+  color: var(--gray-3);
+  font-size: 14px;
+}
+.link:hover {
+  background: var(--primary);
+  color: #fff;
+}
