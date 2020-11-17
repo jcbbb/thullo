@@ -8,6 +8,7 @@ import useAsync from '../../hooks/useAsync'
 import styles from './login.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import linkStyles from '../../styles/link.module.scss';
+import inputStyles from '../../styles/input.module.scss';
 import { Link } from 'react-router-dom';
 import { Formiz, useForm } from '@formiz/core';
 import { isEmail, isMinLength } from '@formiz/validations';
@@ -49,7 +50,7 @@ const Login = () => {
                             }]}
                         />
                     </Spacer>
-                    <Spacer left="0" right="0" top="0" bottom="1.8em">
+                    <Spacer left="0" right="0" top="0" bottom="0.8em">
                         <FormInput
                             name="password"
                             type="password"
@@ -64,7 +65,12 @@ const Login = () => {
                             ]}
                         />
                     </Spacer>
-                    <button className={buttonStyles.primary} disabled={!form.isStepValid}>Login</button>
+                    {loginState.isError && (
+                        <Spacer top="0" bottom="1.8em" left="0" right="0">
+                            <span className={inputStyles.errorText}>{loginState.error?.message}</span>
+                        </Spacer>
+                    )}
+                    <button className={buttonStyles.primary} disabled={!form.isStepValid || loginState.isLoading}>Login</button>
                     <Spacer left="0" right="0" top="1.8em" bottom="1.8em">
                         <span className={styles.seperator}>or</span>
                     </Spacer>
