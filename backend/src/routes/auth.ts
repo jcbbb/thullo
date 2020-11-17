@@ -53,9 +53,8 @@ router.post(
     try {
       const { email, password, name, authCode } = req.body;
       const { accessToken } = await Auth.signup(email, password, name, authCode);
-
       setCookies(res, accessToken)
-      res.status(201).json({ message: 'User created', statusCode: 201 });
+      res.status(201).json({ message: 'User created', statusCode: 201, accessToken });
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
@@ -71,7 +70,7 @@ router.post(
       const { email, password } = req.body;
       const { accessToken } = await Auth.login(email, password);
       setCookies(res, accessToken)
-      res.status(200).json({ message: 'Logged in', statusCode: 200 });
+      res.status(200).json({ message: 'Logged in', statusCode: 200, accessToken });
     } catch (err) {
       res.status(err.statusCode).json({ ...err });
     }
