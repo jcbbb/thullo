@@ -1,17 +1,15 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProfilePic from '../profilePic/profilePic';
+import Profile from '../profile/profile'
 import Hidden from '../hidden/hidden'
 import LogoIcon from '../icons/thullo';
-import ChevronUpIcon from '../icons/chevron-up';
-import ChevronDownIcon from '../icons/chevron-down';
 import ApplicationIcon from '../icons/application';
 import styles from './header.module.scss';
 
 const Header = () => {
-    const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
+
     return (
         <div className={styles.header}>
             <div className={styles.headerLeft}>
@@ -46,31 +44,7 @@ const Header = () => {
                             Search
                         </button>
                     </form>
-                    <div className={styles.profile}>
-                        <ProfilePic />
-                        <details className={styles.dropdown}>
-                            <summary className={styles.summary} onClick={() => setOpen((open) => !open)}>
-                                <span className={styles.summaryText}>Xanthe Neal</span>
-                                {!open ? (
-                                    <ChevronUpIcon color="var(--heading-text)" />
-                                ) : (
-                                        <ChevronDownIcon color="var(--heading-text)" />
-                                    )}
-                            </summary>
-                            <ul className={styles.links}>
-                                <li className={styles.linkItem}>
-                                    <Link to="/settings" className={styles.link}>
-                                        Settings
-                                    </Link>
-                                </li>
-                                <li className={styles.linkItem}>
-                                    <Link to="/logout" className={styles.link}>
-                                        Log out
-                                    </Link>
-                                </li>
-                            </ul>
-                        </details>
-                    </div>
+                    <Profile />
                 </div>
             </Hidden>
         </div>
