@@ -27,7 +27,7 @@ export interface IUser extends Document {
   role: string;
   createdAt?: Date;
   updatedAt?: Date;
-  comparePassword: (candidatePassword: string) => boolean;
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
 userSchema.pre<IUser>('save', function (next) {
@@ -43,8 +43,8 @@ userSchema.pre<IUser>('save', function (next) {
 
 userSchema.index({ email: 1 });
 
-userSchema.methods.comparePassword = function (candidatePassword: string) {
-  return bcrypt.compare(candidatePassword, this.password);
+userSchema.methods.comparePassword = async function (candidatePassword: string) {
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 
 const User = model<IUser>('users', userSchema);
