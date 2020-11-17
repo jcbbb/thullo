@@ -5,13 +5,13 @@ import { generateToken, randomNumber } from '../utils';
 import Mail, { IMailOptions } from './mail';
 
 export const login = async (email: string, password: string) => {
-  const user = await User.findOne({ email }, { password: 0, email: 0 });
+  const user = await User.findOne({ email });
 
   if (!user) {
     throw new BadRequestError('User not found');
   }
 
-  const isMatch = user.comparePassword(password);
+  const isMatch = await user.comparePassword(password);
 
   if (!isMatch) {
     throw new BadRequestError('Incorrect password or email');
