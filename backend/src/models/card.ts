@@ -32,6 +32,6 @@ export interface ICard extends Document {
   updatedAt: Date;
 }
 
-const Card = model<ICard>('cards', cardSchema);
+const Card = model<ICard>('Card', cardSchema);
 
 export default Card;
