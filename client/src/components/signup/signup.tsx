@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import Spacer from '../spacer';
 import GoogleIcon from '../icons/google';
 import GithubIcon from '../icons/github';
@@ -12,12 +12,14 @@ import Indeterminate from '../indeterminate/indeterminate';
 import api from '../../api';
 import cn from 'classnames';
 import useAsync from '../../hooks/useAsync';
+import { useAuthDispatch } from '../../context/authContext'
 import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
 import { Link } from 'react-router-dom';
 import { Formiz, useForm, FormizStep } from '@formiz/core';
 
 const Signup = () => {
     const myForm = useForm({ subscribe: true });
+    const authDispatch = useAuthDispatch()
 
     const [checkExistingEmail, emailState] = useAsync(api.auth.checkEmail);
     const [createTempUser, tempUserState] = useAsync(api.auth.createTempUser);
@@ -54,6 +56,12 @@ const Signup = () => {
 
         form.submitStep();
     };
+
+    useEffect(() => {
+        if (signupState.isSuccess) {
+            authDispatch({ type: 'LOGIN' })
+        }
+    }, [signupState.isSuccess, authDispatch])
 
     return (
         <Formiz connect={myForm} onValidSubmit={handleSubmit}>
