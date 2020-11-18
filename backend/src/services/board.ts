@@ -19,8 +19,8 @@ export const create = async ({ title, creator, visibility = 'Public', cover_phot
         throw new BadRequestError("Creator's id is required")
     }
 
-    const board = new Board({ title, creator, private: isPrivate, cover_photo_url })
-    await board.save();
+    const newBoard = new Board({ title, creator, private: isPrivate, cover_photo_url })
+    return await newBoard.save();
 }
 
 export const getAllUserBoards = async (creatorId: Types.ObjectId): Promise<IBoard[]> => {
@@ -35,9 +35,9 @@ export const getSingle = async (boardId: string): Promise<IBoard> => {
         throw new BadRequestError('Board id is required');
     }
     const board = await Board.findById(boardId).populate('creator');
+
     if (!board) {
         throw new ResourceNotFoundError(`Board with id of ${boardId} is not found`);
     }
-
     return board;
 }
