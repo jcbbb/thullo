@@ -18,6 +18,6 @@ export interface IComment extends Document {
   updatedAt: Date;
 }
 
-const Comment = model<IComment>('cards', commentSchema);
+const Comment = model<IComment>('Comment', commentSchema);
 
 export default Comment;
