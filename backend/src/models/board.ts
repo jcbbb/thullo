@@ -28,6 +28,6 @@ export interface IBoard extends Document {
 
 boardSchema.index({ creator: 1 });
 
-const Board = model<IBoard>('boards', boardSchema);
+const Board = model<IBoard>('Board', boardSchema);
 
 export default Board;
