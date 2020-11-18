@@ -16,6 +16,6 @@ export interface IList extends Document {
   board_id: Types.ObjectId;
 }
 
-const List = model<IList>('lists', listSchema);
+const List = model<IList>('List', listSchema);
 
 export default List;
