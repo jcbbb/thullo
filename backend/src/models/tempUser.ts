@@ -31,6 +31,6 @@ tempUserSchema.methods.compareAuthCode = async function (authCode: string): Prom
   return await bcrypt.compare(authCode, this.authCode);
 };
 
-const TempUser = model<ITempUser>('tempusers', tempUserSchema);
+const TempUser = model<ITempUser>('Tempuser', tempUserSchema);
 
 export default TempUser;
