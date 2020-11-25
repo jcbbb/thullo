@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as BoardService from '../services/board';
+import * as BoardService from '../services/board.service';
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
     try {

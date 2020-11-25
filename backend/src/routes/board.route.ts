@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 import { verifyToken } from '../utils'
-import * as BoardController from '../controllers/board'
+import * as BoardController from '../controllers/board.controller'
 
 const router = Router();
 

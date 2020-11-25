@@ -1,6 +1,6 @@
 import { Types } from 'mongoose'
 import { BadRequestError, ResourceNotFoundError } from "../utils/errors"
-import Board, { IBoard } from '../models/board';
+import Board, { IBoard } from '../models/board.model';
 
 type ICreate = {
     title: string;

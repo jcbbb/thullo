@@ -1,8 +1,8 @@
-import User from '../models/user';
-import TempUser from '../models/tempUser';
+import User from '../models/user.model';
+import TempUser from '../models/tempUser.model';
 import { BadRequestError } from '../utils/errors';
 import { generateToken, randomNumber } from '../utils';
-import Mail, { IMailOptions } from './mail';
+import Mail, { IMailOptions } from './mail.service';
 
 export const login = async (email: string, password: string) => {
   const user = await User.findOne({ email });

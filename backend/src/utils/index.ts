@@ -1,8 +1,8 @@
 import { Response, Request, NextFunction } from 'express';
-import { IUser } from '../models/user';
+import { IUser } from '../models/user.model';
 import { AuthenticationError, AuthorizationError, BadRequestError } from './errors'
 import jwt from 'jsonwebtoken';
-import redisClient from '../services/redis';
+import redisClient from '../services/redis.service';
 import config from '../config';
 
 type AccessToken = string;

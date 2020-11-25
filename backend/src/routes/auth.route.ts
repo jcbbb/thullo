@@ -1,7 +1,7 @@
 import { Router, Response, Request } from 'express';
 import { validationFor, validate } from '../utils/validator';
 import { setCookies, verifyToken } from '../utils';
-import * as Auth from '../services/auth';
+import * as Auth from '../services/auth.service';
 
 const router = Router();
 

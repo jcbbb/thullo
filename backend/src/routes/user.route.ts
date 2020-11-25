@@ -1,6 +1,6 @@
 import { Router, Response, Request } from 'express';
 import { verifyToken } from '../utils'
-import * as User from '../services/user';
+import * as User from '../services/user.service';
 
 const router = Router();
 
