@@ -41,23 +41,23 @@ const rules = {
   authCode: authCodeValidationRules,
 };
 
-export const validationFor = (...ruleNames: RuleNames[]) => {
+export const validate = (...ruleNames: RuleNames[]) => {
   let validations: any = [];
   ruleNames.forEach((ruleName) => {
     validations = [...validations, ...rules[ruleName]()];
   });
 
-  return validations;
-};
+  return async (req: Request, res: Response, next: NextFunction) => {
+    await Promise.all(validations.map((validation: any) => validation.run(req)));
 
-export const validate = (req: Request, res: Response, next: NextFunction) => {
-  const errors = validationResult(req);
+    const errors = validationResult(req);
 
-  if (errors.isEmpty()) return next();
+    if (errors.isEmpty()) return next();
 
-  const extractedErrors: ErrorObject[] = [];
+    const extractedErrors: ErrorObject[] = [];
 
-  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
+    errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
 
-  return next(new ValidationError('Validation Failed', 422, extractedErrors))
+    return next(new ValidationError('Validation Failed', 422, extractedErrors));
+  };
 };
