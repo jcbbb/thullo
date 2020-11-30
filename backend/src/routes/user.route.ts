@@ -1,17 +1,9 @@
-import { Router, Response, Request } from 'express';
-import { verifyToken } from '../utils'
-import * as User from '../services/user.service';
+import { Router } from 'express';
+import { verifyToken } from '../utils';
+import * as UserController from '../controllers/user.controller';
 
 const router = Router();
 
-router.get('/profile', verifyToken, async (req: Request, res: Response) => {
-    try {
-        const { _id } = req.user;
-        const user = await User.getUserById(_id)
-        res.status(200).json({ user })
-    } catch (err) {
-        res.status(err.statusCode).json({ ...err });
-    }
-})
+router.get('/profile', verifyToken, UserController.profile);
 
 export default router;
