@@ -1,21 +1,27 @@
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.boards {
-    width: 100%;
-    max-width: 1070px;
+.boardsContainer {
+  width: 100%;
+  max-width: 1070px;
+  margin: 3.7rem auto;
 }
 
 .btnText {
-    margin-left: 0.4em;
+  margin-left: 0.4em;
 }
 
 .heading {
-    color: var(--heading-text);
-    font-size: 1.125em;
-    font-family: var(--font-poppins);
-    font-weight: 400;
+  color: var(--heading-text);
+  font-size: 1.125em;
+  font-family: var(--font-poppins);
+  font-weight: 400;
+}
+
+.boards {
+  display: flex;
+  margin: -1rem;
 }

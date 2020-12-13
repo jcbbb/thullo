@@ -1,5 +1,6 @@
 import { Document, model, Schema, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const userSchema = new Schema(
   {
@@ -12,7 +13,7 @@ const userSchema = new Schema(
     blocked: { type: Boolean, default: false },
     role: { type: String, default: 'user' },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 export interface IUser extends Document {
@@ -39,6 +40,13 @@ userSchema.pre<IUser>('save', function (next) {
       next();
     })
     .catch((err) => next(err));
+});
+
+userSchema.pre<IUser>('save', function (next) {
+  if (!this.email) return next();
+  const md5 = crypto.createHash('md5').update(this.email).digest('hex');
+  this.gravatar_url = `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
+  next();
 });
 
 userSchema.index({ email: 1 });

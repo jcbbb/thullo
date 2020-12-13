@@ -1,17 +1,18 @@
 .card {
-    display: block;
-    padding: 0.8em;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    background: #fff;
-    max-width: fit-content;
-    border-radius: 12px;
-    text-decoration: none;
+  display: block;
+  padding: 0.8em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  max-width: fit-content;
+  border-radius: 12px;
+  text-decoration: none;
+  margin: 1rem;
 }
 
 .heading {
-    color: var(--heading-text);
-    font-size: 1.1em;
+  color: var(--heading-text);
+  font-size: 1.1em;
 }
 .members {
-    display: flex;
+  display: flex;
 }

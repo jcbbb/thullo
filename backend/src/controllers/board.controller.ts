@@ -31,7 +31,7 @@ export const getAllUserBoards = async (req: Request, res: Response, next: NextFu
   try {
     const { _id } = req.user;
     const boards = await BoardService.getAllUserBoards(_id);
-    res.status(200).json({ boards });
+    res.status(200).json(boards);
   } catch (err) {
     return next(err);
   }
