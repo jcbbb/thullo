@@ -32,7 +32,7 @@ export const signup = async (email: string, password: string, name: string, auth
 
   if (!tempUserCandidate) {
     throw new BadRequestError(
-      "User with given email was not granted an auth code. Please, don't mess with me!",
+      "User with given email was not granted an auth code. Please, don't mess with me!"
     );
   }
   const isValidAuthCode = tempUserCandidate.compareAuthCode(authCode);

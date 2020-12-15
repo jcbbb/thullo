@@ -14,7 +14,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {Formiz, useForm} from '@formiz/core';
 import {isEmail, isMinLength} from '@formiz/validations';
 import {useAuthDispatch} from '../../context/authContext';
-import api from '../../api';
+import api from '../../api'
 
 const Login = () => {
   const form = useForm({subscribe: true});
