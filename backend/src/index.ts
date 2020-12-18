@@ -4,7 +4,7 @@ import router from './routes';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from './utils/error-handler';
-import { db } from './services/db.service';
+import * as db from './services/db.service';
 
 const app = express();
 
