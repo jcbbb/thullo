@@ -28,21 +28,15 @@ const smtp = nodemailer.createTransport({
   },
 } as Options);
 
-const Mail = (() => {
-  const send = async ({ to, template, subject, vars }: IMailOptions) => {
-    try {
-      await smtp.sendMail({
-        to,
-        from: 'Thullo <verify@thullo.com>',
-        subject: subject || templates[template as TemplateKey].subject,
-        html: templates[template as TemplateKey].render(vars as never),
-      });
-    } catch (err) {
-      throw new MailError('Something went wrong with email delivery');
-    }
-  };
-
-  return { send };
-})();
-
-export default Mail;
+export const send = async ({ to, template, subject, vars }: IMailOptions) => {
+  try {
+    await smtp.sendMail({
+      to,
+      from: 'Thullo <verify@thullo.com>',
+      subject: subject || templates[template as TemplateKey].subject,
+      html: templates[template as TemplateKey].render(vars as never),
+    });
+  } catch (err) {
+    throw new MailError('Something went wrong with email delivery');
+  }
+};
