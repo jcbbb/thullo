@@ -1,8 +1,8 @@
 import User from '../models/user.model';
 import TempUser from '../models/tempUser.model';
-import { BadRequestError } from '../utils/errors';
+import { BadRequestError, ResourceNotFoundError } from '../utils/errors';
 import { generateToken, randomNumber } from '../utils';
-import Mail, { IMailOptions } from './mail.service';
+import * as Mail from './mail.service';
 
 export const login = async (email: string, password: string) => {
   const user = await User.findOne({ email });
@@ -52,7 +52,7 @@ export const verify = async (email: string, authCode: string) => {
   const candidate = await TempUser.findOne({ email });
 
   if (!candidate) {
-    throw new BadRequestError('User does not exist');
+    throw new ResourceNotFoundError('User does not exist');
   }
 
   const isMatch = await candidate.compareAuthCode(authCode);
@@ -95,5 +95,5 @@ export const createTempUser = async (email: string) => {
     vars: {
       authCode,
     },
-  } as IMailOptions);
+  } as Mail.IMailOptions);
 };
