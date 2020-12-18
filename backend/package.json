@@ -12,7 +12,7 @@
     "client": "yarn --cwd ../client run start",
     "test": "cross-env NODE_ENV=test jest",
     "start:prod-app": "cross-env NODE_ENV=production concurrently \"yarn client\" \"yarn start\"",
-    "stat:dev-app": "cross-env NODE_ENV=development concurrently \"yarn client\" \"yarn development-server\""
+    "start:dev-app": "cross-env NODE_ENV=development concurrently \"yarn client\" \"yarn development-server\""
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
