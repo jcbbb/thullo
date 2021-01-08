@@ -35,7 +35,7 @@ export const signup = async (email: string, password: string, name: string, auth
       "User with given email was not granted an auth code. Please, don't mess with me!"
     );
   }
-  const isValidAuthCode = tempUserCandidate.compareAuthCode(authCode);
+  const isValidAuthCode = await tempUserCandidate.compareAuthCode(authCode);
   if (!isValidAuthCode) {
     throw new BadRequestError("Auth code provided didn't match our records. Don't mess with me!");
   }
@@ -71,6 +71,7 @@ export const check = async (email: string): Promise<void | BadRequestError> => {
     throw new BadRequestError('Email is already taken');
   }
 };
+
 export const createTempUser = async (email: string) => {
   const candidate = await TempUser.findOne({ email });
   const existingUser = await User.findOne({ email });
@@ -79,11 +80,11 @@ export const createTempUser = async (email: string) => {
     throw new BadRequestError('Email is already taken');
   }
 
-  const authCode = randomNumber();
-
   if (candidate) {
     await TempUser.deleteOne({ email });
   }
+
+  const authCode = randomNumber();
 
   const tempUser = new TempUser({ email, authCode });
 
