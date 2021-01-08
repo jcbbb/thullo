@@ -1,14 +1,14 @@
 export type IError = {
-  message?: string;
-  statusCode?: number;
+  message: string;
+  statusCode: number;
   errors?: any;
-}
+};
 
 class DomainError extends Error implements IError {
-  statusCode?: number;
+  statusCode: number;
   errors?: any;
 
-  constructor(message?: string, statusCode?: number, errors?: any) {
+  constructor(message: string = 'Internal server error', statusCode: number = 500, errors?: any) {
     super();
     this.name = this.constructor.name;
     this.message = message!;
@@ -55,7 +55,7 @@ export class MailError extends DomainError {
 }
 
 export class ValidationError extends DomainError {
-  constructor(message = 'Validation failed', statusCode = 422, errors: any) {
-    super(message, statusCode, errors)
+  constructor(message = 'Validation failed', statusCode = 422, errors?: any) {
+    super(message, statusCode, errors);
   }
 }
