@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from 'mongoose';
-import bcrypt from 'bcryptjs';
+import argon2 from 'argon2';
 
 const tempUserSchema = new Schema({
   email: { type: String, unique: true, required: true },
@@ -16,8 +16,8 @@ export interface ITempUser extends Document {
 }
 
 tempUserSchema.pre<ITempUser>('save', function (next) {
-  bcrypt
-    .hash(this.authCode, 10)
+  argon2
+    .hash(this.authCode)
     .then((hash) => {
       this.authCode = hash;
       next();
@@ -28,7 +28,7 @@ tempUserSchema.pre<ITempUser>('save', function (next) {
 tempUserSchema.index({ email: 1 });
 
 tempUserSchema.methods.compareAuthCode = async function (authCode: string): Promise<boolean> {
-  return await bcrypt.compare(authCode, this.authCode);
+  return await argon2.verify(this.authCode, authCode);
 };
 
 const TempUser = model<ITempUser>('Tempuser', tempUserSchema);
