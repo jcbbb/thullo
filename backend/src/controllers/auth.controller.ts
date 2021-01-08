@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
-import { setCookies } from '../utils';
 import { asyncHandler } from '../utils/async-handler';
 import * as AuthService from '../services/auth.service';
+import * as CookieService from '../services/cookie.service';
 
 export const checkEmail = asyncHandler(async (req: Request, res: Response) => {
   const { email } = req.body;
@@ -24,15 +24,21 @@ export const verify = asyncHandler(async (req: Request, res: Response) => {
 export const signup = asyncHandler(async (req: Request, res: Response) => {
   const { email, password, name, authCode } = req.body;
   const { accessToken } = await AuthService.signup(email, password, name, authCode);
-  setCookies(res, accessToken);
-  res.status(201).json({ message: 'User created', statusCode: 201, accessToken });
+  const { cookieName, token, opts } = CookieService.getAccessTokenCookie(accessToken);
+  res
+    .cookie(cookieName, token, opts)
+    .status(201)
+    .json({ message: 'User created', statusCode: 201, accessToken });
 });
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
   const { accessToken } = await AuthService.login(email, password);
-  setCookies(res, accessToken);
-  res.status(200).json({ message: 'Logged in', statusCode: 200, accessToken });
+  const { cookieName, token, opts } = CookieService.getAccessTokenCookie(accessToken);
+  res
+    .cookie(cookieName, token, opts)
+    .status(200)
+    .json({ message: 'Logged in', statusCode: 200, accessToken });
 });
 
 export const me = (req: Request, res: Response) => {
