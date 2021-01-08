@@ -22,6 +22,7 @@ const smtp = nodemailer.createTransport({
   host: config.smtp_server,
   port: 465,
   secure: true,
+  connectionTimeout: 1000 * 10,
   auth: {
     user: config.smtp_username,
     pass: config.smtp_password,
@@ -37,6 +38,6 @@ export const send = async ({ to, template, subject, vars }: IMailOptions) => {
       html: templates[template as TemplateKey].render(vars as never),
     });
   } catch (err) {
-    throw new MailError('Something went wrong with email delivery');
+    throw new MailError('Something went wrong with email delivery. Maybe timeout?');
   }
 };
