@@ -15,7 +15,6 @@ export const request = async (endpoint: string, { body, ...customConfig }: any =
   return window.fetch(endpoint, config).then(async (response) => {
     if (response.status === 401) {
       // auth.logout();
-      window.location.assign(window.location.origin);
       return;
     }
 
