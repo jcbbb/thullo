@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useCallback, useMemo, useEffect} from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 import Spacer from '../spacer';
 import GoogleIcon from '../icons/google';
 import GithubIcon from '../icons/github';
@@ -13,15 +13,15 @@ import Indeterminate from '../indeterminate/indeterminate';
 import api from '../../api';
 import cn from 'classnames';
 import useAsync from '../../hooks/useAsync';
-import {useAuthDispatch} from '../../context/authContext';
-import {isEmail, isNumber, isMinLength, isMaxLength} from '@formiz/validations';
-import {Link, useNavigate} from 'react-router-dom';
-import {Formiz, useForm, FormizStep} from '@formiz/core';
+import { useAuthDispatch } from '../../context/authContext';
+import { isEmail, isNumber, isMinLength, isMaxLength } from '@formiz/validations';
+import { Link, useNavigate } from 'react-router-dom';
+import { Formiz, useForm, FormizStep } from '@formiz/core';
 
 const Signup = () => {
-  const myForm = useForm({subscribe: true});
+  const myForm = useForm({ subscribe: true });
   const authDispatch = useAuthDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [checkExistingEmail, emailState] = useAsync(api.auth.checkEmail);
   const [createTempUser, tempUserState] = useAsync(api.auth.createTempUser);
@@ -47,12 +47,12 @@ const Signup = () => {
 
     const stepName = form.currentStep.name;
     if (stepName === 'step_1') {
-      const {email} = form.values;
+      const { email } = form.values;
       await createTempUser(email);
     }
 
     if (stepName === 'step_2') {
-      const {email, authCode} = form.values;
+      const { email, authCode } = form.values;
       await verifyAuthCode(email, authCode);
     }
 
@@ -60,22 +60,34 @@ const Signup = () => {
   };
 
   const signup = useCallback(() => {
-    authDispatch({type: 'SIGNUP'})
-    navigate('/')
-  }, [authDispatch, navigate])
+    authDispatch({ type: 'SIGNUP' });
+    navigate('/');
+  }, [authDispatch, navigate]);
 
   useEffect(() => {
     if (signupState.isSuccess) {
-      signup()
+      signup();
     }
   }, [signupState.isSuccess, signup]);
+
+  useEffect(() => {
+    console.log('Effect run');
+    if (tempUserState.isError) {
+      console.log(tempUserState.isError);
+      if (myForm.goToStep && myForm.invalidateFields) {
+        console.log('Here here');
+        myForm.invalidateFields({ email: tempUserState.error?.message });
+        myForm.goToStep('step_1');
+      }
+    }
+  }, [tempUserState.isError, myForm]);
 
   return (
     <Center>
       <Formiz connect={myForm} onValidSubmit={handleSubmit}>
         <form
           noValidate
-          className={cn(styles.form, {[styles.formDisabled]: shouldShowProgress})}
+          className={cn(styles.form, { [styles.formDisabled]: shouldShowProgress })}
           onSubmit={handleSubmitStep}
         >
           <div className={styles.formContainer}>
@@ -83,7 +95,7 @@ const Signup = () => {
             <h3 className={styles.formHeading}>Signup</h3>
             {!myForm.isFirstStep && (
               <button className={styles.backBtn} onClick={myForm.prevStep} type="button">
-                <ArrowLeft size={{width: 20, height: 20}} color="var(--primary)" />
+                <ArrowLeft size={{ width: 20, height: 20 }} color="var(--primary)" />
               </button>
             )}
             <FormizStep name="step_1">
@@ -181,14 +193,14 @@ const Signup = () => {
               <span className={styles.seperator}>or</span>
             </Spacer>
             <button className={buttonStyles.authOption}>
-              <span style={{height: 20}}>
+              <span style={{ height: 20 }}>
                 <GoogleIcon />
               </span>
               <span className={styles.authOptionText}>Continue with Google</span>
             </button>
             <Spacer left="0" right="0" bottom="1.8em">
               <button className={buttonStyles.authOption}>
-                <span style={{height: 20}}>
+                <span style={{ height: 20 }}>
                   <GithubIcon />
                 </span>
                 <span className={styles.authOptionText}>Continue with Github</span>
