@@ -9,16 +9,22 @@ import styles from './boards.module.scss';
 import buttonStyles from '../../styles/button.module.scss';
 import useEscape from '../../hooks/useEscape';
 import useAsync from '../../hooks/useAsync';
+import useMounted from '../../hooks/useMounted';
+import { useAuthStore } from '../../context/authContext';
 import api from '../../api';
 
 const Boards = () => {
   const { isActive, toggle, dismiss } = useBackdrop();
+  const { isAuthenticated } = useAuthStore();
+  const isMounted = useMounted();
   useEscape(dismiss);
   const [getUserBoards, { data }] = useAsync(api.board.getAllUserBoards);
 
   useEffect(() => {
-    getUserBoards();
-  }, [getUserBoards]);
+    if (isMounted) {
+      getUserBoards();
+    }
+  }, [getUserBoards, isMounted, isAuthenticated]);
 
   return (
     <>
