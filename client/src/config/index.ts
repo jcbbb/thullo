@@ -1,7 +1,7 @@
-import routes, { RouteType } from './configs'
+import routes, { RouteType } from './configs';
 
-const getRoutes = (type: RouteType) => {
-    return routes[type];
-}
+const get_routes = (type: RouteType) => {
+  return routes[type];
+};
 
-export default getRoutes;
+export default get_routes;

@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { verifyToken, validate } from '../utils';
+import { verify_token, validate } from '../utils';
 import * as UserController from '../controllers/user.controller';
 
 const router = Router();
 
-router.get('/profile', verifyToken, UserController.getProfile);
-router.get('/', validate('limit', 'offset'), UserController.getAllUsers);
-router.get('/:userId', UserController.getUserById);
-router.delete('/:userId', verifyToken, UserController.deleteUserById);
-router.patch('/:userId', UserController.patchUserById);
+router.get('/profile', verify_token, UserController.get_profile);
+router.get('/', UserController.get_all_users);
+router.get('/:user_id', UserController.get_user_by_id);
+router.delete('/:user_id', verify_token, UserController.delete_user_by_id);
+router.patch('/:user_id', UserController.patch_user_by_id);
 
 export default router;

@@ -2,11 +2,11 @@ import config from '../config';
 
 type AccessToken = string;
 
-export const getAccessTokenCookie = (accessToken: AccessToken) => {
+export const get_access_token_cookie = (access_token: AccessToken) => {
   const accessTokenExpiration = parseInt(config.access_token_expiration, 10);
   return {
-    cookieName: 'accessToken',
-    token: accessToken,
+    cookie_name: 'access_token',
+    token: access_token,
     opts: {
       expires: new Date(Date.now() + accessTokenExpiration),
       secure: true,

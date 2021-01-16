@@ -1,24 +1,21 @@
-import { Document, model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IUser } from '../interfaces/user.interface';
 import argon2 from 'argon2';
 import crypto from 'crypto';
 
-const isEmail = (str: string) => str.length > 5;
-const isLength = ({ min = 0, max }: { min: number; max?: number }) => (val: string) => {
-  return val.length >= min && (typeof max === 'undefined' || val.length <= max);
-};
+const email_regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
-const userSchema = new Schema(
+const user_schema = new Schema(
   {
     name: { type: String, required: true },
     email: {
       type: String,
       required: true,
-      validate: [isEmail, 'Email is not valid'],
+      match: [email_regex, 'Email is not valid'],
     },
     password: {
       type: String,
-      validate: [isLength({ min: 6, max: 10 }), 'Password must be at least 6 characters long'],
+      minlength: [6, 'Password must be at least 6 characters long'],
     },
     verified: { type: Boolean, default: false },
     profile_photo_url: { type: String },
@@ -26,38 +23,47 @@ const userSchema = new Schema(
     blocked: { type: Boolean, default: false },
     role: { type: String, default: 'user' },
   },
-  { timestamps: true }
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
-userSchema.pre<IUser>('save', function (next) {
+user_schema.pre<IUser>('save', async function (next) {
   if (!this.isModified('password')) return next();
-  argon2
-    .hash(this.password)
-    .then((hash) => {
-      this.password = hash;
-      next();
-    })
-    .catch((err) => next(err));
+  try {
+    const hash = await argon2.hash(this.password);
+    this.password = hash;
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
-userSchema.pre<IUser>('validate', function (next) {
-  console.log('this :>> ', this);
-  next();
-});
-
-userSchema.pre<IUser>('save', function (next) {
+user_schema.pre<IUser>('save', function (next) {
   if (!this.email) return next();
   const md5 = crypto.createHash('md5').update(this.email).digest('hex');
   this.gravatar_url = `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
   next();
 });
 
-userSchema.index({ email: 1 });
+user_schema.pre('findOneAndUpdate', async function (next) {
+  const query = this as any;
+  const user: IUser = await query.model.findOne(query.getQuery());
+  const is_match = await user.compare_password(query._update.password);
+  if (!is_match) {
+    try {
+      const hash = await argon2.hash(query._update.password);
+      query._update.password = hash;
+    } catch (err) {
+      next(err);
+    }
+  }
+});
 
-userSchema.methods.comparePassword = async function (candidatePassword: string) {
-  return await argon2.verify(this.password, candidatePassword);
+user_schema.index({ email: 1 });
+
+user_schema.methods.compare_password = async function (candidate_password: string) {
+  return await argon2.verify(this.password, candidate_password);
 };
 
-const User = model<IUser>('User', userSchema);
+const User = model<IUser>('User', user_schema);
 
 export default User;

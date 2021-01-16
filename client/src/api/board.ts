@@ -1,4 +1,5 @@
 import { request } from '../utils';
+import humps from 'humps';
 
 type ICreate = {
   title: string;
@@ -11,11 +12,11 @@ export interface IBoardEndpoints {
   getAllUserBoards: () => Promise<Response | undefined>;
 }
 
-export const createBoardEndoints = (resourceUrl: string): IBoardEndpoints => {
+export const createBoardEndpoints = (resourceUrl: string): IBoardEndpoints => {
   const endpoints: IBoardEndpoints = {
     create: async (values) =>
       await request(resourceUrl, {
-        body: values,
+        body: humps.decamelizeKeys(values),
       }),
     getAllUserBoards: async () => await request(resourceUrl),
   };

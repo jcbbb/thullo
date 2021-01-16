@@ -1,12 +1,12 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
-const listSchema = new Schema(
+const list_schema = new Schema(
   {
     title: { type: String, required: true },
     order: { type: Number, required: true },
     board_id: { type: Types.ObjectId, required: true },
   },
-  { timestamps: true },
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export interface IList extends Document {
@@ -14,8 +14,10 @@ export interface IList extends Document {
   title: string;
   order: number;
   board_id: Types.ObjectId;
+  created_at: Date;
+  updated_at: Date;
 }
 
-const List = model<IList>('List', listSchema);
+const List = model<IList>('List', list_schema);
 
 export default List;

@@ -6,17 +6,9 @@ type ErrorParam = string | number;
 type ErrorMessage = string;
 type ErrorObject = Record<ErrorParam, ErrorMessage>;
 
-type RuleNames = 'email' | 'password' | 'authCode' | 'name' | 'limit' | 'offset';
+type RuleNames = 'email' | 'password' | 'auth_code' | 'name';
 
-const limitParamRules = () => [
-  param('limit').isNumeric().withMessage('Limit param should be numeric').optional(),
-];
-
-const offsetParamRules = () => [
-  param('offset').isNumeric().optional().withMessage('Offset param should be numeric').optional(),
-];
-
-const emailValidationRules = () => [
+const email_validation_rules = () => [
   body('email')
     .notEmpty()
     .isString()
@@ -25,8 +17,8 @@ const emailValidationRules = () => [
     .withMessage('Email should be valid'),
 ];
 
-const authCodeValidationRules = () => [
-  body('authCode')
+const auth_code_validation_rules = () => [
+  body('auth_code')
     .notEmpty()
     .withMessage('Auth code cannot be empty')
     .isString()
@@ -35,7 +27,7 @@ const authCodeValidationRules = () => [
     .withMessage('Auth code must be 6 characters long'),
 ];
 
-const passwordValidationRules = () => [
+const password_validation_rules = () => [
   body('password')
     .notEmpty()
     .withMessage('Password cannot be empty')
@@ -43,22 +35,17 @@ const passwordValidationRules = () => [
     .withMessage('Password must be at least 6 characters long'),
 ];
 
-const nameValidationRules = () => [body('name').notEmpty().withMessage('Name is required')];
+const name_validation_rules = () => [body('name').notEmpty().withMessage('Name is required')];
 
 const rules = {
-  email: emailValidationRules,
-  password: passwordValidationRules,
-  authCode: authCodeValidationRules,
-  name: nameValidationRules,
-  limit: limitParamRules,
-  offset: offsetParamRules,
+  email: email_validation_rules,
+  password: password_validation_rules,
+  auth_code: auth_code_validation_rules,
+  name: name_validation_rules,
 };
 
-export const validate = (...ruleNames: RuleNames[]) => {
-  let validations: any = [];
-  ruleNames.forEach((ruleName) => {
-    validations = [...validations, ...rules[ruleName]()];
-  });
+export const validate = (...rule_names: RuleNames[]) => {
+  const validations = rule_names.map((rule_name) => rules[rule_name]());
 
   return async (req: Request, res: Response, next: NextFunction) => {
     await Promise.all(validations.map((validation: any) => validation.run(req)));
@@ -67,10 +54,10 @@ export const validate = (...ruleNames: RuleNames[]) => {
 
     if (errors.isEmpty()) return next();
 
-    const extractedErrors: ErrorObject = {};
+    const extracted_errors: ErrorObject = {};
 
-    errors.array().map((err) => (extractedErrors[err.param] = err.msg));
+    errors.array().map((err) => (extracted_errors[err.param] = err.msg));
 
-    return next(new ValidationError('Validation Failed', 422, extractedErrors));
+    return next(new ValidationError('Validation Failed', 422, extracted_errors));
   };
 };

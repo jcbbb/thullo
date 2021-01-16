@@ -4,7 +4,7 @@ type Obj = {
   [key: string]: string;
 };
 
-const cardSchema = new Schema(
+const card_schema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
@@ -15,7 +15,7 @@ const cardSchema = new Schema(
     order: { type: Number, required: true },
     list_id: { type: Types.ObjectId, required: true },
   },
-  { timestamps: true },
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export interface ICard extends Document {
@@ -28,10 +28,10 @@ export interface ICard extends Document {
   attachments: Obj;
   order: number;
   list_id: Types.ObjectId;
-  cretedAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
-const Card = model<ICard>('Card', cardSchema);
+const Card = model<ICard>('Card', card_schema);
 
 export default Card;

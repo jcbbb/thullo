@@ -10,9 +10,9 @@ export interface IUser extends Document {
   gravatar_url?: string;
   blocked?: boolean;
   role: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  comparePassword: (candidatePassword: string) => Promise<boolean>;
+  created_at?: Date;
+  updated_at?: Date;
+  compare_password: (candidate_password: string) => Promise<boolean>;
 }
 
 export interface IUserFilterOpts {

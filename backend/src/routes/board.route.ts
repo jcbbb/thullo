@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { verifyToken } from '../utils';
+import { verify_token } from '../utils';
 import * as BoardController from '../controllers/board.controller';
 
 const router = Router();
 
-router.post('/', verifyToken, BoardController.create);
-router.get('/', verifyToken, BoardController.getAllUserBoards);
-router.get('/:boardId', verifyToken, BoardController.getSingle);
+router.post('/', verify_token, BoardController.create);
+router.get('/', verify_token, BoardController.get_all_user_boards);
+router.get('/:board_id', verify_token, BoardController.get_single);
 
 export default router;

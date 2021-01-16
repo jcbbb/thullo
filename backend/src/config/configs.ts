@@ -19,7 +19,7 @@ export type EnvType = 'development' | 'production' | 'test';
 
 type IConfig = {
   [key in EnvType]: {
-    mongoUri: string;
+    mongo_uri: string;
     origin: string;
     port: number;
     env: string;
@@ -35,7 +35,7 @@ type IConfig = {
 
 const configs: IConfig = {
   development: {
-    mongoUri: MONGO_URI_DEV,
+    mongo_uri: MONGO_URI_DEV,
     origin: ORIGIN_DEV,
     port: PORT,
     env: NODE_ENV,
@@ -48,7 +48,7 @@ const configs: IConfig = {
     smtp_password: SMTP_PASSWORD,
   },
   production: {
-    mongoUri: MONGO_URI,
+    mongo_uri: MONGO_URI,
     origin: ORIGIN,
     port: PORT,
     env: NODE_ENV,
@@ -61,7 +61,7 @@ const configs: IConfig = {
     smtp_password: SMTP_PASSWORD,
   },
   test: {
-    mongoUri: MONGO_URI_TEST,
+    mongo_uri: MONGO_URI_TEST,
     origin: ORIGIN_DEV,
     port: PORT,
     env: NODE_ENV,

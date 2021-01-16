@@ -1,6 +1,6 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
-const boardSchema = new Schema(
+const board_schema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String },
@@ -11,7 +11,7 @@ const boardSchema = new Schema(
     lists: { type: Array },
     creator: { type: Types.ObjectId, required: true, ref: 'User' },
   },
-  { timestamps: true },
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export interface IBoard extends Document {
@@ -22,12 +22,12 @@ export interface IBoard extends Document {
   members: Types.ObjectId[];
   lists: Types.ObjectId[];
   creator: Types.ObjectId;
-  cretedAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
-boardSchema.index({ creator: 1 });
+board_schema.index({ creator: 1 });
 
-const Board = model<IBoard>('Board', boardSchema);
+const Board = model<IBoard>('Board', board_schema);
 
 export default Board;

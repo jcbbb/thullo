@@ -1,7 +1,9 @@
-export const randomNumber = () => Math.floor(100000 + Math.random() * 900000);
+export const random_number = () => Math.floor(100000 + Math.random() * 900000);
 export { permit } from './permit';
-export { asyncHandler } from './async-handler';
+export { async_handler } from './async-handler';
+export { error_handler } from './error-handler';
+export { not_found_handler } from './404';
 export { logger } from './logger';
 export { validate } from './validator';
-export { verifyToken } from './verify-token';
-export { generateToken } from './generate-token';
+export { verify_token } from './verify-token';
+export { generate_token } from './generate-token';

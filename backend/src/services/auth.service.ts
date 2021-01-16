@@ -1,7 +1,7 @@
 import User from '../models/user.model';
-import TempUser from '../models/tempUser.model';
+import TempUser from '../models/temp-user.model';
 import { BadRequestError, ResourceNotFoundError } from '../utils/errors';
-import { generateToken, randomNumber } from '../utils';
+import { generate_token, random_number } from '../utils';
 import * as Mail from './mail.service';
 
 export const login = async (email: string, password: string) => {
@@ -11,72 +11,74 @@ export const login = async (email: string, password: string) => {
     throw new BadRequestError('User not found');
   }
 
-  const isMatch = await user.comparePassword(password);
+  const is_match = await user.compare_password(password);
 
-  if (!isMatch) {
+  if (!is_match) {
     throw new BadRequestError('Incorrect password or email');
   }
 
-  const accessToken = generateToken(user);
+  const access_token = generate_token(user);
 
-  return { user, accessToken };
+  return { user, access_token };
 };
 
-export const signup = async (email: string, password: string, name: string, authCode: string) => {
+export const signup = async (email: string, password: string, name: string, auth_code: string) => {
   const candidate = await User.findOne({ email });
-  const tempUserCandidate = await TempUser.findOne({ email });
+  const temp_user_candidate = await TempUser.findOne({ email });
 
   if (candidate) {
     throw new BadRequestError('User already  exists');
   }
 
-  if (!tempUserCandidate) {
+  if (!temp_user_candidate) {
     throw new BadRequestError(
       "User with given email was not granted an auth code. Please, don't mess with me!"
     );
   }
-  const isValidAuthCode = await tempUserCandidate.compareAuthCode(authCode);
-  if (!isValidAuthCode) {
+
+  const is_valid_auth_code = await temp_user_candidate.compare_auth_code(auth_code);
+
+  if (!is_valid_auth_code) {
     throw new BadRequestError("Auth code provided didn't match our records. Don't mess with me!");
   }
 
   const user = new User({ email, password, name });
   await user.save();
 
-  const accessToken = generateToken(user);
+  const access_token = generate_token(user);
 
-  return { user, accessToken };
+  return { user, access_token };
 };
 
-export const verify = async (email: string, authCode: string) => {
+export const verify = async (email: string, auth_code: string) => {
   const candidate = await TempUser.findOne({ email });
 
   if (!candidate) {
     throw new ResourceNotFoundError('User does not exist');
   }
 
-  const isMatch = await candidate.compareAuthCode(authCode);
+  const is_match = await candidate.compare_auth_code(auth_code);
 
-  if (!isMatch) {
+  if (!is_match) {
     throw new BadRequestError('Auth code does not match');
   }
 
-  return isMatch;
+  return is_match;
 };
 
 export const check = async (email: string): Promise<void | BadRequestError> => {
-  const existingEmail = await User.findOne({ email });
+  const existing_email = await User.findOne({ email });
 
-  if (existingEmail) {
+  if (existing_email) {
     throw new BadRequestError('Email is already taken');
   }
 };
 
-export const createTempUser = async (email: string) => {
+export const create_temp_user = async (email: string) => {
   const candidate = await TempUser.findOne({ email });
-  const existingUser = await User.findOne({ email });
+  const existing_user = await User.findOne({ email });
 
-  if (existingUser) {
+  if (existing_user) {
     throw new BadRequestError('Email is already taken');
   }
 
@@ -84,17 +86,18 @@ export const createTempUser = async (email: string) => {
     await TempUser.deleteOne({ email });
   }
 
-  const authCode = randomNumber();
+  const auth_code = random_number();
 
-  const tempUser = new TempUser({ email, authCode });
+  const temp_user = new TempUser({ email, auth_code });
 
-  await tempUser.save();
+  await temp_user.save();
+
   await Mail.send({
-    to: tempUser.email,
+    to: temp_user.email,
     template: 'auth-code',
-    subject: `Your auth code is ${authCode}`,
+    subject: `Your auth code is ${auth_code}`,
     vars: {
-      authCode,
+      auth_code,
     },
   } as Mail.IMailOptions);
 };

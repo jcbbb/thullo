@@ -1,12 +1,12 @@
 import { Document, model, Schema, Types } from 'mongoose';
 
-const commentSchema = new Schema(
+const comment_schema = new Schema(
   {
     card_id: { type: Types.ObjectId, required: true },
     user_id: { type: Types.ObjectId, required: true },
     text: { type: String, required: true },
   },
-  { timestamps: true },
+  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
 );
 
 export interface IComment extends Document {
@@ -14,10 +14,10 @@ export interface IComment extends Document {
   card_id: Types.ObjectId;
   user_id: Types.ObjectId;
   text: string;
-  cretedAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  udpated_at: Date;
 }
 
-const Comment = model<IComment>('Comment', commentSchema);
+const Comment = model<IComment>('Comment', comment_schema);
 
 export default Comment;

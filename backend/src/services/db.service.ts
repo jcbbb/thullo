@@ -3,7 +3,7 @@ import config from '../config';
 
 export const connect = async () => {
   try {
-    await mongoose.connect(config.mongoUri, {
+    await mongoose.connect(config.mongo_uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
