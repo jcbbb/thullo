@@ -7,3 +7,4 @@ export { logger } from './logger';
 export { validate } from './validator';
 export { verify_token } from './verify-token';
 export { generate_token } from './generate-token';
+export { request_id } from './request-id';
