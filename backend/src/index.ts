@@ -4,12 +4,15 @@ import router from './routes';
 import cors from 'cors';
 import cookie_parser from 'cookie-parser';
 import morgan from 'morgan';
-import { error_handler, logger, not_found_handler } from './utils';
+import helmet from 'helmet';
+import { global_logger } from './utils/global-logger';
+import { error_handler, logger, not_found_handler, request_id } from './utils';
 import * as db from './services/db.service';
 
 const app = express();
 
 app.use(express.json());
+app.use(helmet());
 app.use(morgan('combined'));
 app.use(cookie_parser());
 app.use(
@@ -19,6 +22,13 @@ app.use(
   })
 );
 
+app.use(request_id());
+app.use(
+  global_logger({
+    capture_response_body: true,
+    capture_request_body: true,
+  })
+);
 app.use('/', router);
 app.use(error_handler);
 app.use('*', not_found_handler);
