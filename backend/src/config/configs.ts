@@ -2,6 +2,7 @@ import {
   MONGO_URI,
   MONGO_URI_DEV,
   MONGO_URI_TEST,
+  ELASTIC_SEARCH_URI,
   ORIGIN_DEV,
   ORIGIN,
   NODE_ENV,
@@ -23,6 +24,7 @@ type IConfig = {
     origin: string;
     port: number;
     env: string;
+    elastic_search_uri: string;
     access_token_secret: string;
     refresh_token_secret: string;
     access_token_expiration: string;
@@ -39,6 +41,7 @@ const configs: IConfig = {
     origin: ORIGIN_DEV,
     port: PORT,
     env: NODE_ENV,
+    elastic_search_uri: ELASTIC_SEARCH_URI,
     access_token_secret: ACCESS_TOKEN_SECRET,
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,
@@ -52,6 +55,7 @@ const configs: IConfig = {
     origin: ORIGIN,
     port: PORT,
     env: NODE_ENV,
+    elastic_search_uri: ELASTIC_SEARCH_URI,
     access_token_secret: ACCESS_TOKEN_SECRET,
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,
@@ -65,6 +69,7 @@ const configs: IConfig = {
     origin: ORIGIN_DEV,
     port: PORT,
     env: NODE_ENV,
+    elastic_search_uri: ELASTIC_SEARCH_URI,
     access_token_secret: ACCESS_TOKEN_SECRET,
     refresh_token_secret: REFRESH_TOKEN_SECRET,
     access_token_expiration: ACCESS_TOKEN_EXPIRATION,

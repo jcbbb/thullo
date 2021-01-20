@@ -7,6 +7,7 @@ type IEnv = {
   MONGO_URI_DEV: string;
   MONGO_URI_TEST: string;
   ORIGIN_DEV: string;
+  ELASTIC_SEARCH_URI: string;
   ORIGIN: string;
   NODE_ENV: string;
   ACCESS_TOKEN_SECRET: string;
@@ -23,6 +24,7 @@ const {
   NODE_ENV,
   MONGO_URI_DEV,
   MONGO_URI_TEST,
+  ELASTIC_SEARCH_URI,
   ORIGIN,
   ORIGIN_DEV,
   ACCESS_TOKEN_SECRET,
@@ -51,4 +53,5 @@ export {
   SMTP_USERNAME,
   SMTP_PASSWORD,
   PORT,
+  ELASTIC_SEARCH_URI,
 };
