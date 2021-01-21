@@ -6,24 +6,21 @@ chai.use(chai_http);
 
 describe('User api', () => {
   describe('GET /api/users ', () => {
-    it('should return all users with limit of 10', async (done) => {
+    it('should return all users with limit of 10', async () => {
       const response = await chai.request(app).get('/api/users');
       expect(response.status).to.equal(200);
-      done();
     });
 
-    it('should return only one user if `limit` query param is set to 1', async (done) => {
+    it('should return only one user if `limit` query param is set to 1', async () => {
       const response = await chai.request(app).get('/api/users').query({ limit: 1 });
       expect(response.status).to.equal(200);
       expect(response.body).to.have.lengthOf(1);
-      done();
     });
 
-    it('when there are two users in database, setting `offset` query param to 2 should return empty array', async (done) => {
+    it('when there are two users in database, setting `offset` query param to 2 should return empty array', async () => {
       const response = await chai.request(app).get('/api/users').query({ offset: 2 });
       expect(response.status).to.equal(200);
       expect(response.body).to.have.lengthOf(0);
-      done();
     });
   });
 });
