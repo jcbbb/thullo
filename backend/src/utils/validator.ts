@@ -1,10 +1,10 @@
-import { body, validationResult, param } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 import { Request, Response, NextFunction } from 'express';
 import { ValidationError } from './errors';
 
-type ErrorParam = string | number;
-type ErrorMessage = string;
-type ErrorObject = Record<ErrorParam, ErrorMessage>;
+type ErrorKey = string | number;
+type ErrorValue = string;
+type ErrorObject = Record<ErrorKey, ErrorValue>;
 
 type RuleNames = 'email' | 'password' | 'auth_code' | 'name';
 

@@ -29,13 +29,13 @@ app.use(
     capture_request_body: true,
   })
 );
-app.use('/', router);
+app.use('/api', router);
 app.use(error_handler);
 app.use('*', not_found_handler);
 
-db.connect().then(() => {
-  app.listen(config.port, () => logger.info(`Server started on port ${config.port}`));
-});
+db.connect()
+  .then(() => logger.info('Database connected'))
+  .catch((err) => logger.error(`Database connection error ${err}`));
 
 process
   .on('uncaughtException', (err) => {
@@ -45,3 +45,5 @@ process
   .on('unhandledRejection', (reason, p) => {
     logger.error(reason!, `unhandledRejection at ${p}`);
   });
+
+export default app;

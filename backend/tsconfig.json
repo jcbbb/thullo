@@ -1,18 +1,18 @@
 {
-    "compilerOptions": {
-        "target": "ES2019",
-        "module": "CommonJS",
-        "outDir": "./build",
-        "rootDir": "./src",
-        "lib": [
-            "ES2020"
-        ],
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-        "typeRoots": [
-            "./src/types"
-        ]
-    }
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "CommonJS",
+    "outDir": "./build",
+    "rootDir": "./src",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["@types/mocha"],
+    "typeRoots": ["./src/types"]
+  },
+  "ts-node": {
+    "transpileOnly": true
+  }
 }
